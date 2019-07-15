@@ -32,9 +32,9 @@ class CatalogController < ApplicationController
 
     config.add_sort_field 'relevance', sort: 'score desc', label: 'Relevance'
 
-    config.add_facet_field 'readonly_creator_ssim', label: 'Creator', limit: true
-    config.add_facet_field 'readonly_subject_ssim', label: 'Subject', limit: true
-    config.add_facet_field 'readonly_type_ssim', label: 'Type', limit: true
+    config.add_facet_field  'readonly_grantee_ssim', label: 'Grantee'
+    config.add_facet_field  'readonly_temporal_coverage_ssim', label: 'Year of Grant'
+    config.add_facet_field  'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
 
     config.add_facet_fields_to_solr_request!
 
