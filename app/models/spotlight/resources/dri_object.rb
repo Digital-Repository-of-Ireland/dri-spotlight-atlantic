@@ -16,6 +16,8 @@ module Spotlight
         add_label
         add_creator
         add_subject
+        add_theme
+        add_subtheme
         add_type
         add_temporal_coverage
         add_geographical_coverage
@@ -49,6 +51,16 @@ module Spotlight
 
       def add_temporal_coverage
         solr_hash['readonly_temporal_coverage_ssim'] = metadata_class.dcmi_name(metadata['temporal_coverage'])
+      end
+
+      def add_theme
+        return unless metadata.key?('subject') && metadata['subject'].present?
+        solr_hash['readonly_theme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[0]
+      end
+
+      def add_subtheme
+        return unless metadata.key?('subject') && metadata['subject'].present?
+        solr_hash['readonly_subtheme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[1..-1]
       end
 
       def add_geographical_coverage
@@ -209,6 +221,12 @@ module Spotlight
             when 'grantee'
               add_grantee(field, hash)
               next
+            when 'theme'
+              add_theme(field, hash)
+              next
+            when 'subtheme'
+              add_subtheme(field, hash)
+              next
             end
 
             next unless metadata[field].present?
@@ -218,7 +236,7 @@ module Spotlight
         end
 
         def desc_metadata_fields
-          %w(description creator subject grantee temporal_coverage geographical_coverage type attribution rights license)
+          %w(description creator subject grantee theme subtheme temporal_coverage geographical_coverage type attribution rights license)
         end
 
         def add_attribution(field, hash)
@@ -237,6 +255,33 @@ module Spotlight
           hash[field.capitalize] = metadata['subject'][0]
         end
 
+        def add_theme(field, hash)
+          return unless metadata.key?('subject') && metadata['subject'].present?
+          themes = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
+          return if themes.empty?
+
+          hash[field.capitalize] ||= []
+          hash[field.capitalize] = themes[0]
+        end
+
+        def add_theme(field, hash)
+          return if themes.empty?
+
+          hash[field.capitalize] ||= []
+          hash[field.capitalize] = themes[0]
+        end
+
+        def add_subtheme(field, hash)
+          return if themes.empty? || themes.length < 2
+
+          hash[field.capitalize] ||= []
+          hash[field.capitalize] = themes[1..-1]
+        end
+
+        def themes
+          return [] unless metadata.key?('subject') && metadata['subject'].present?
+          metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
+        end
 
         def add_dcmi_field(field, hash)
           return unless metadata.key?(field)
