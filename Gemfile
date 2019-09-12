@@ -71,7 +71,7 @@ gem 'bootswatch-rails'
 
 gem 'rsolr', '>= 1.0'
 gem 'jquery-rails'
-gem 'devise'
+gem "devise", ">= 4.7.1"
 gem 'devise-guests', '~> 0.6'
 gem 'friendly_id'
 gem 'riiif'
