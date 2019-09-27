@@ -22,8 +22,10 @@ module Spotlight
         add_temporal_coverage
         add_geographical_coverage
         add_grantee
+        add_grant
         add_metadata
         add_collection_id
+        add_collection
         add_image_urls
         solr_hash
       end
@@ -50,7 +52,7 @@ module Spotlight
       end
 
       def add_temporal_coverage
-        solr_hash['readonly_temporal_coverage_ssim'] = metadata_class.dcmi_name(metadata['temporal_coverage'])
+        solr_hash['readonly_temporal_coverage_ssim'] = metadata_class.dcmi_name(metadata['temporal_coverage']) if metadata.key?('temporal_coverage') && metadata['temporal_coverage'].present?
       end
 
       def add_theme
@@ -60,15 +62,20 @@ module Spotlight
 
       def add_subtheme
         return unless metadata.key?('subject') && metadata['subject'].present?
-        solr_hash['readonly_subtheme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[1..-1]
+        solr_hash['readonly_subtheme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[1]
       end
 
       def add_geographical_coverage
-        solr_hash['readonly_geographical_coverage_ssim'] = metadata_class.dcmi_name(metadata['geographical_coverage'])
+        solr_hash['readonly_geographical_coverage_ssim'] = metadata_class.dcmi_name(metadata['geographical_coverage']) if metadata.key?('geographical_coverage') && metadata['geographical_coverage'].present?
       end
 
       def add_grantee
         solr_hash['readonly_grantee_ssim'] = metadata['subject'][0] if metadata.key?('subject') && metadata['subject'].present?
+      end
+
+      def add_grant
+        return unless metadata.key?('subject') && metadata['subject'].present?
+        solr_hash['readonly_grant_ssim'] = metadata['subject'].select { |s| s.start_with?('Grant') }
       end
 
       def add_type
@@ -83,6 +90,11 @@ module Spotlight
         if metadata.key?('isGovernedBy')
           solr_hash[collection_id_field] = [compound_id(metadata['isGovernedBy'])]
         end
+      end
+
+      def add_collection
+        return unless metadata.key?('subject') && metadata['subject'].present?
+        solr_hash['readonly_collection_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[2]
       end
 
       def collection_id_field
@@ -221,11 +233,17 @@ module Spotlight
             when 'grantee'
               add_grantee(field, hash)
               next
+            when 'grant'
+              add_grant(field, hash)
+              next
             when 'theme'
               add_theme(field, hash)
               next
             when 'subtheme'
               add_subtheme(field, hash)
+              next
+            when 'collection'
+              add_collection(field, hash)
               next
             end
 
@@ -236,7 +254,7 @@ module Spotlight
         end
 
         def desc_metadata_fields
-          %w(description creator subject grantee theme subtheme temporal_coverage geographical_coverage type attribution rights license)
+          %w(description creator subject grantee grant theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
         end
 
         def add_attribution(field, hash)
@@ -253,6 +271,15 @@ module Spotlight
 
           hash[field.capitalize] ||= []
           hash[field.capitalize] = metadata['subject'][0]
+        end
+
+        def add_grant(field, hash)
+          return unless metadata.key?('subject') && metadata['subject'].present?
+          grant = metadata['subject'].select { |s| s.start_with?('Grant') }
+          return if grant.empty?
+
+          hash[field.capitalize] ||= []
+          hash[field.capitalize] = grant[0]
         end
 
         def add_theme(field, hash)
@@ -275,7 +302,14 @@ module Spotlight
           return if themes.empty? || themes.length < 2
 
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = themes[1..-1]
+          hash[field.capitalize] = themes[1]
+        end
+
+        def add_collection(field, hash)
+          return if themes.empty? || themes.length < 3
+
+          hash[field.capitalize] ||= []
+          hash[field.capitalize] = themes[2]
         end
 
         def themes

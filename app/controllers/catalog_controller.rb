@@ -4,8 +4,8 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
 
   configure_blacklight do |config|
-          config.show.oembed_field = :oembed_url_ssm
-          config.show.partials.insert(1, :oembed)
+    config.show.oembed_field = :oembed_url_ssm
+    config.show.partials.insert(1, :oembed)
 
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
@@ -33,11 +33,13 @@ class CatalogController < ApplicationController
     config.add_sort_field 'relevance', sort: 'score desc', label: 'Relevance'
 
     config.add_facet_field  'readonly_grantee_ssim', label: 'Grantee'
+    config.add_facet_field  'readonly_grant_ssim', label: 'Grant'
     config.add_facet_field  'readonly_temporal_coverage_ssim', label: 'Year of Grant'
     config.add_facet_field  'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
     config.add_facet_field  'readonly_type_ssim', label: 'Type'
     config.add_facet_field  'readonly_subtheme_ssim', label: 'Sub-theme'
     config.add_facet_field  'readonly_theme_ssim', label: 'Theme'
+    config.add_facet_field  'readonly_collection_ssim', label: 'Collection'
 
     config.add_facet_fields_to_solr_request!
 
