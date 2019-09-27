@@ -24,3 +24,5 @@
 .ruby-version
 
 *.rdb
+
+/public/uploads
