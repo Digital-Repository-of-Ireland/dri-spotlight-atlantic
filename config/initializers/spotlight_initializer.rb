@@ -57,8 +57,10 @@
 # Spotlight::Engine.config.ga_page_analytics_options = config.ga_analytics_options.merge(limit: 5)
 
 # ==> Sir Trevor Widget Configuration
-# Spotlight::Engine.config.sir_trevor_widgets = %w(
-#   Heading Text List Quote Iframe Video Oembed Rule UploadedItems Browse
-#   FeaturedPages SolrDocuments SolrDocumentsCarousel SolrDocumentsEmbed
-#   SolrDocumentsFeatures SolrDocumentsGrid SearchResults
-# )
+Spotlight::Engine.config.sir_trevor_widgets = %w(
+   Heading Text List Quote Iframe Video Oembed Rule UploadedItems Browse LinkToSearch
+      FeaturedPages SolrDocuments SolrDocumentsCarousel SolrDocumentsEmbed
+      SolrDocumentsFeatures SolrDocumentsGrid SearchResults
+ )
+
+Spotlight::Engine.config.exhibit_themes = ['default']
