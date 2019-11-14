@@ -21,12 +21,18 @@ module Spotlight
         add_type
         add_temporal_coverage
         add_geographical_coverage
-        add_grantee
-        add_grant
         add_metadata
         add_collection_id
         add_collection
-        add_image_urls
+
+        if metadata['type'] == ['Collection']
+          add_subcollection_type
+        else
+          add_grantee
+          add_grant
+          add_image_urls
+        end
+
         solr_hash
       end
 
@@ -83,6 +89,7 @@ module Spotlight
       end
 
       def add_document_id
+        solr_hash['readonly_dri_id_ssim'] = id
         solr_hash[blacklight_config.document_model.unique_key.to_sym] = compound_id(id)
       end
 
@@ -95,6 +102,19 @@ module Spotlight
       def add_collection
         return unless metadata.key?('subject') && metadata['subject'].present?
         solr_hash['readonly_collection_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[2]
+      end
+
+      def add_subcollection_type
+        unless metadata['type'] == ['Collection']
+          solr_hash['readonly_subcollection_type_ssim'] = nil
+          return
+        end
+
+        solr_hash['readonly_subcollection_type_ssim'] = if metadata['title'].first.start_with?("Grant")
+                                                          'grant'
+                                                        else
+                                                          'grantee'
+                                                        end
       end
 
       def collection_id_field

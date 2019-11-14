@@ -11,10 +11,20 @@
 // about supported directives.
 //
 //= require rails-ujs
-//= require turbolinks
 //
 // Required by Blacklight
 //= require jquery
+//= require jquery_ujs
+//= require bootstrap/tooltip
+//= require bootstrap/popover
 //= require blacklight/blacklight
-
+//
 //= require_tree .
+
+$(document).ready(function() {
+	$('.facet-popover').popover( {container: 'body', delay: { show: 100, hide: 100 }} );
+});
+
+$(document).on('page:change', function(){
+  $('facet-popover').popover( {container: 'body', delay: { show: 100, hide: 100 }} );
+});

@@ -47,5 +47,106 @@ class CatalogController < ApplicationController
 
     # Set which views by default only have the title displayed, e.g.,
     # config.view.gallery.title_only_by_default = true
+    config.add_show_field 'readonly_temporal_coverage_ssim', label: 'Year of Grant'
+    config.add_show_field 'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
+  end
+
+  # get search results from the solr index
+  def index
+    (@response, @document_list) = search_results(params)
+
+    grants_and_grantees
+
+    respond_to do |format|
+      format.html { store_preferred_view }
+      format.rss  { render layout: false }
+      format.atom { render layout: false }
+      format.json do
+        @presenter = Blacklight::JsonPresenter.new(@response,
+                                                   @document_list,
+                                                   facets_from_request,
+                                                   blacklight_config)
+      end
+      additional_response_formats(format)
+      document_export_formats(format)
+    end
+  end
+
+  # get a single document from the index
+  # to add responses for formats other than html or json see _Blacklight::Document::Export_
+  def show
+    @response, @document = fetch params[:id]
+
+    @grant = { 'grantee' => {}, 'grant' => {} }
+
+    grantee_info(@document['readonly_grantee_tesim'])
+    grant_info(@document['readonly_grant_tesim'])
+
+    respond_to do |format|
+      format.html { setup_next_and_previous_documents }
+      format.json { render json: { response: { document: @document } } }
+      additional_export_formats(@document, format)
+    end
+  end
+
+  private
+
+  def grants_and_grantees
+    results = repository.search(
+      fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant"
+    )
+
+    docs = results['response']['docs']
+    grantees = facet_by_field_name('readonly_grantee_ssim').items.map(&:value)
+    grants = facet_by_field_name('readonly_grant_ssim').items.map(&:value)
+
+    @grantees = {}
+    @grants = {}
+
+    docs.each do |doc|
+      if doc['readonly_subcollection_type_ssim'] == ['grantee']
+        grantees.each do |grantee|
+          if doc['readonly_subject_tesim'].any?{ |s| s.casecmp(grantee)==0 }
+            @grantees[grantee] = doc['readonly_description_tesim'][0]
+          end
+        end
+      end
+
+      if doc['readonly_subcollection_type_ssim'] == ['grant']
+        grants.each do |grant|
+          if doc['full_title_tesim'].include?(grant)
+            @grants[grant] = doc['readonly_description_tesim'][0]
+          end
+        end
+      end
+    end
+  end
+
+  def grantee_info(grantee)
+    result = repository.search(
+      q: "readonly_subject_tesim:\"#{grantee}\"",
+      fq: "readonly_subcollection_type_ssim:grantee"
+    )
+    if result['response']['docs'].present?
+      grantee_collection = result['response']['docs'][0]
+      grantee_description = grantee_collection['readonly_description_tesim'][0]
+
+      @grant['grantee']['name'] = grantee.first
+      @grant['grantee']['description'] = grantee_description
+    end
+  end
+
+  def grant_info(grant)
+    result = repository.search(
+      q: "readonly_title_tesim:\"#{grant}\"",
+      fq: "readonly_subcollection_type_ssim:grant"
+    )
+    if result['response']['docs'].present?
+      grant_collection = result['response']['docs'][0]
+      grant_description = grant_collection['readonly_description_tesim'][0]
+
+      @grant['grant']['number'] = grant.first
+      @grant['grant']['description'] = grant_description
+    end
   end
 end

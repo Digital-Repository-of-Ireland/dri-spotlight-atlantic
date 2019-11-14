@@ -16,13 +16,13 @@ h3 {
     line-height: 150%;
 }
 a {
-    
-    text-decoration: none; 
+
+    text-decoration: none;
     color: $dri_midgrey;
 }
 a:hover,
 a:focus {
-    
+
     text-decoration: none;
 }
 /*-------------- Mixins --------------*/
@@ -102,4 +102,13 @@ a:focus {
 .openseadragon-container {
   display: block;
   min-height: 300px;
+}
+
+.popover {
+    color: $dri_grey;
+    max-width: 60%;
+}
+
+.facet-popover {
+    padding-left: 5px;
 }
