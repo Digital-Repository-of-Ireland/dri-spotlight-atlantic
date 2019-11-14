@@ -26,3 +26,5 @@
 *.rdb
 
 /public/uploads
+
+solr-development
