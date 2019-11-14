@@ -7,6 +7,9 @@ class CatalogController < ApplicationController
     config.show.oembed_field = :oembed_url_ssm
     config.show.partials.insert(1, :oembed)
 
+    config.show.document_actions.delete(:email)
+    config.show.document_actions.delete(:sms)
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
