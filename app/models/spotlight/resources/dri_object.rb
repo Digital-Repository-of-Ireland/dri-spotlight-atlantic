@@ -13,6 +13,8 @@ module Spotlight
 
       def to_solr
         add_document_id
+        add_doi
+        add_depositing_institute
         add_label
         add_creator
         add_subject
@@ -51,6 +53,22 @@ module Spotlight
 
       def add_creator
         solr_hash['readonly_creator_ssim'] = metadata['creator']
+      end
+
+      def add_doi
+        if !metadata['doi'].nil? && metadata['doi'].key?('url')
+          solr_hash['readonly_doi_tesim'] = metadata['doi']['url']
+        end
+      end
+
+      def add_depositing_institute
+        if metadata.key?('institute')
+          metadata['institute'].each do |institute|
+            if institute['depositing'] == true
+              solr_hash['readonly_depositing_institute_tesim'] = institute['name']
+            end
+          end
+        end
       end
 
       def add_subject
@@ -247,7 +265,10 @@ module Spotlight
             when 'attribution'
               add_attribution(field, hash)
               next
-            when 'temporal_coverage', 'geographical_coverage'
+            when 'temporal_coverage'
+              add_dcmi_field(field, hash)
+              next
+            when 'geographical_coverage'
               add_dcmi_field(field, hash)
               next
             when 'grantee'
@@ -274,7 +295,7 @@ module Spotlight
         end
 
         def desc_metadata_fields
-          %w(description creator subject grantee grant theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
+          %w(description doi creator subject grantee grant theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
         end
 
         def add_attribution(field, hash)
