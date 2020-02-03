@@ -1,0 +1,58 @@
+.panel-default {
+	border-color: $ap_light_blue;
+}
+
+.panel-default > .panel-heading {
+  color: $ap_dark_blue;
+  background-color: $dri_white;
+  border-color: $ap_light_blue;
+}
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: $ap_light_blue;
+}
+
+.facet_limit-active > .panel-heading {
+  color: $dri_white;
+  background-color: $ap_dark_blue;
+  border-color: $ap_light_blue;
+
+  a:focus {
+    text-decoration: none;
+    color: $dri_white;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: $ap_light_blue;
+  }
+}
+
+.facet-values li .selected {
+  color: $ap_light_blue;
+}
+
+.panel-heading.collapse-toggle .panel-title:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: right;        /* adjust as needed */
+    color: $ap_dark_blue;         /* adjust as needed */
+    font-size: 0.8em;
+    line-height: normal;
+}
+
+.facet_limit-active .panel-heading.collapse-toggle .panel-title:after {
+    color: $dri_white;
+  }
+
+a {
+  text-decoration: none;
+  color: $ap_dark_blue;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+  color: $ap_light_blue;
+}

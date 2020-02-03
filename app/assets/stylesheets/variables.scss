@@ -22,12 +22,15 @@ $dri_logo_url: "dri/dri_ident.png";
 $dri_logo_small_url: 'dri/dri_ident_small.png';
 $dri_logo_tiny_url: 'dri/dri_ident_tiny.png';
 
+$ap_dark_blue: #076A73;
+$ap_light_blue: #0793A8;
+
 $logo_image: $dri_logo_url;
 
-$brand-primary: $dri_lightgrey;
+$brand-primary: $ap_dark_blue;
 
 //** Global textual link color.
-$link-color:            $dri_lightgrey;
+$link-color:            $ap_dark_blue;
 //** Link hover color set via `darken()` function.
 $link-hover-color:      darken($link-color, 15%);
 //** Link hover decoration.
@@ -38,30 +41,42 @@ $navbar-inverse-border: $dri_white;
 $navbar-default-bg: $dri_white;
 $navbar-transparent-page-bg: rgba(0, 0, 0, 0.25);
 
+$masthead-bg: $dri_white;
+
 $btn-default-color:              $dri_white;
-$btn-default-bg:                 $dri_lightgrey;
-$btn-default-border:             $dri_lightgrey;
+$btn-default-bg:                 $ap_dark_blue;
+$btn-default-border:             $ap_dark_blue;
 $btn-primary-color:              $dri_white;
 $btn-primary-bg:                 $dri_green;
 $btn-info-color:                 $dri_white;
 $btn-info-bg:                    $dri_green;
 $btn-info-border:                darken($dri_green, 5%);
 
-$pagination-color:                     $dri_lightgrey;
+$pagination-color:                     $ap_dark_blue;
 $pagination-bg:                        #fff;
-$pagination-border:                    #ddd;
+$pagination-border:                    $ap_dark_blue;
 
-$pagination-hover-color:               $dri_darkgrey;
-$pagination-hover-bg:                  $dri_extralightgrey;
-$pagination-hover-border:              #ddd;
+$pagination-hover-color:               $dri_white;
+$pagination-hover-bg:                  $ap_light_blue;
+$pagination-hover-border:              $ap_dark_blue;
 
-$pagination-active-color:              $dri_darkgrey;
-$pagination-active-bg:                 $brand-primary;
-$pagination-active-border:             #ddd;
+$pagination-active-color:              $dri_white;
+$pagination-active-bg:                 $ap_dark_blue;
+$pagination-active-border:             $ap_dark_blue;
 
-$pagination-disabled-color:            $dri_extralightgrey;
+$pagination-disabled-color:            $dri_lightgrey;
 $pagination-disabled-bg:               #fff;
-$pagination-disabled-border:           #ddd;
+$pagination-disabled-border:           $ap_dark_blue;
+
+$navbar-default-link-color:                $ap_dark_blue;
+$navbar-default-link-hover-color:          $dri_white;
+$navbar-default-link-hover-bg:             $ap_light_blue;
+$navbar-default-link-active-color:         $dri_white;
+$navbar-default-link-active-bg:            $ap_dark_blue;
+$navbar-default-link-disabled-color:       #ccc !default;
+$navbar-default-link-disabled-bg:          transparent !default;
+
+$breadcrumb-active-color:                  $ap_light_blue;
 
 @import "bootstrap/variables";
 @import "spotlight/variables";

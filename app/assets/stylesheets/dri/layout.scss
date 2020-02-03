@@ -8,6 +8,7 @@
     height: $brandbar-height;
     padding: $brandbar-padding-vertical $navbar-padding-horizontal;
     width: 189px;
+    display: none;
   }
 
   .navbar-nav {
@@ -65,4 +66,5 @@
 
 .dri_main_footer {
   margin-top: 2 * $padding-large-vertical;
+  display: none;
 }
