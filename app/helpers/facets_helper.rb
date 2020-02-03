@@ -33,7 +33,7 @@ module FacetsHelper
   end
 
   def facet_info(value)
-    return @grantees[value] if @grantees.key?(value)
-    return @grants[value] if @grants.key?(value)
+    return @grantees[value] if @grantees && @grantees.key?(value)
+    return @grants[value] if @grants && @grants.key?(value)
   end
 end
