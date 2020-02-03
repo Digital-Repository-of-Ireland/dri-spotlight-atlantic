@@ -1,4 +1,4 @@
-<%= render :partial => 'show_tools' %>
+<%= render partial: 'show_tools' %>
 
 <%= link_to("https://repository.dri.ie/catalog/#{@document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
       <%= button_tag('View Record', {class: 'dri_open_button'}) %>
@@ -8,7 +8,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">More Like This</div>
     <div class="panel-body">
-      <%= render :collection => @document.more_like_this, :partial => 'show_more_like_this', :as => :document %>
+      <%= render collection: @document.more_like_this, partial: 'show_more_like_this', as: :document %>
     </div>
   </div>
 <% end %>
