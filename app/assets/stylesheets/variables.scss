@@ -52,7 +52,7 @@ $btn-info-color:                 $dri_white;
 $btn-info-bg:                    $dri_green;
 $btn-info-border:                darken($dri_green, 5%);
 
-$pagination-color:                     $ap_dark_blue;
+$pagination-color:                     $ap_light_blue;
 $pagination-bg:                        #fff;
 $pagination-border:                    $ap_dark_blue;
 
@@ -64,19 +64,22 @@ $pagination-active-color:              $dri_white;
 $pagination-active-bg:                 $ap_dark_blue;
 $pagination-active-border:             $ap_dark_blue;
 
-$pagination-disabled-color:            $dri_lightgrey;
+$pagination-disabled-color:            #333;
 $pagination-disabled-bg:               #fff;
 $pagination-disabled-border:           $ap_dark_blue;
 
-$navbar-default-link-color:                $ap_dark_blue;
-$navbar-default-link-hover-color:          $dri_white;
-$navbar-default-link-hover-bg:             $ap_light_blue;
-$navbar-default-link-active-color:         $dri_white;
-$navbar-default-link-active-bg:            $ap_dark_blue;
-$navbar-default-link-disabled-color:       #ccc !default;
-$navbar-default-link-disabled-bg:          transparent !default;
+$navbar-default-link-color:            $ap_dark_blue;
+$navbar-default-link-hover-color:      $dri_white;
+$navbar-default-link-hover-bg:         $ap_light_blue;
+$navbar-default-link-active-color:     $dri_white;
+$navbar-default-link-active-bg:        $ap_dark_blue;
+$navbar-default-link-disabled-color:   #ccc !default;
+$navbar-default-link-disabled-bg:      transparent !default;
 
-$breadcrumb-active-color:                  $ap_light_blue;
+$dropdown-link-hover-bg:               $ap_light_blue;
+$dropdown-link-hover-color:            $dri_white;
+
+$breadcrumb-active-color:              $ap_light_blue;
 
 @import "bootstrap/variables";
 @import "spotlight/variables";
