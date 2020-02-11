@@ -47,12 +47,12 @@ $btn-default-color:              $dri_white;
 $btn-default-bg:                 $ap_dark_blue;
 $btn-default-border:             $ap_dark_blue;
 $btn-primary-color:              $dri_white;
-$btn-primary-bg:                 $dri_green;
+$btn-primary-bg:                 $ap_dark_blue;
 $btn-info-color:                 $dri_white;
 $btn-info-bg:                    $dri_green;
 $btn-info-border:                darken($dri_green, 5%);
 
-$pagination-color:                     $ap_light_blue;
+$pagination-color:                     $ap_dark_blue;
 $pagination-bg:                        #fff;
 $pagination-border:                    $ap_dark_blue;
 
@@ -76,10 +76,12 @@ $navbar-default-link-active-bg:        $ap_dark_blue;
 $navbar-default-link-disabled-color:   #ccc !default;
 $navbar-default-link-disabled-bg:      transparent !default;
 
+$nav-link-hover-bg:                    $ap_light_blue;
+
 $dropdown-link-hover-bg:               $ap_light_blue;
 $dropdown-link-hover-color:            $dri_white;
 
-$breadcrumb-active-color:              $ap_light_blue;
+$breadcrumb-active-color:              $ap_dark_blue;
 
 $headings-small-color:                 $dri_darkgrey;
 

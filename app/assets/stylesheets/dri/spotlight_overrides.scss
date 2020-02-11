@@ -10,19 +10,12 @@ html {
         margin: 0;
     }
 }
-h1,
-h2,
-h3 {
-    line-height: 150%;
-}
-a {
 
+a {
     text-decoration: none;
-    color: $dri_midgrey;
 }
 a:hover,
 a:focus {
-
     text-decoration: none;
 }
 /*-------------- Mixins --------------*/
@@ -87,7 +80,16 @@ a:focus {
 }
 
 .page_links > a {
-  color: $ap_light_blue;
+  color: $ap_dark_blue;
+}
+
+.nav-pills > li > a {
+  &:hover {
+      color: $dri_white;
+  }
+  &:focus {
+      color: $dri_white;
+  }
 }
 
 .search-widgets {
@@ -120,19 +122,3 @@ a:focus {
 .facet-popover {
     padding-left: 5px;
 }
-
-button.dri_open_button {
-    color: #FFF;
-    border: none;
-    background-color: $dri_teal;
-    padding: 0;
-    margin: 20px 0 20px 0;
-    width: 100%;
-    height: 26px;
-    display: block;
-    @include border_radius;
-    &:hover {
-        background-color: darken($dri_teal, 6%);
-    }
-}
-

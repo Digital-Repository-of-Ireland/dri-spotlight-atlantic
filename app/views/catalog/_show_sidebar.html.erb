@@ -1,7 +1,7 @@
 <%= render partial: 'show_tools' %>
 
 <%= link_to("https://repository.dri.ie/catalog/#{@document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
-      <%= button_tag('View Record', {class: 'dri_open_button'}) %>
+      <%= button_tag('View on DRI', {class: 'dri_open_button'}) %>
     <% end %>
 
 <% unless @document.more_like_this.empty? %>
