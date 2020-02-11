@@ -1,0 +1,19 @@
+<% link_to_search_block.with_solr_helper(self) %>
+
+<% if link_to_search_block.searches? %>
+  <%= render 'spotlight/searches/tags', tags: link_to_search_block.tags %>
+
+  <% link_to_search_block.searches(params[:tag]).each_with_index do |search, index| %>
+    <div class="col-xs-12 col-sm-4 exhibit-card">
+      <div class="flipper">
+        <div class="card-front card-face">
+           <%= render 'spotlight/sir_trevor/blocks/search_card_front', search: search %>
+        </div>
+        <div class="card-back card-face">
+          <%= render 'spotlight/sir_trevor/blocks/search_card_back', search: search %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+

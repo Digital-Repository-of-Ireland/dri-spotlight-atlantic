@@ -1,0 +1,7 @@
+<% if search.thumbnail.present? && search.thumbnail.iiif_url %>
+  <%= image_tag(search.thumbnail.iiif_url) %>
+<% else %>
+  <%= image_tag 'spotlight/default_thumbnail.jpg', class: 'default-thumbnail' %>
+<% end %>
+
+<h2 class="card-title"><%= search.title %></h2>

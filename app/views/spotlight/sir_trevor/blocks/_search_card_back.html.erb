@@ -1,0 +1,23 @@
+<h2 class="card-title">
+  <%= search.title %>
+</h2>
+
+<p class="subtitle">
+  <%= search.subtitle %>
+</p>
+
+<% if search.long_description %>
+  <p class="description">
+    <%= truncated_description = search.long_description.truncate(168, omission: '', separator: ' ') %>
+  <% if search.long_description.length > 168 %>
+    <%= content_tag(:span,"&hellip;".html_safe, class: "visible-sm visible-md") %>
+    <span class="hidden-sm hidden-md">
+      <%= search.long_description.slice(truncated_description.length, search.long_description.length) %>
+    </span>
+  <% end %>
+  </p>
+<% end %>
+
+<div class="visit-exhibit center-btn">
+  <%= link_to t(:'dri.spotlight.view_theme'), spotlight.search_exhibit_catalog_path(search.exhibit, search.query_params || {}), class: "btn btn-primary", role: "button" %>
+</div>
