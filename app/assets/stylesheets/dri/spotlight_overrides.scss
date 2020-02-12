@@ -18,6 +18,9 @@ a:hover,
 a:focus {
     text-decoration: none;
 }
+a:hover {
+  color: $ap_light_blue;
+}
 /*-------------- Mixins --------------*/
 
 //mixin example for border radius
@@ -81,6 +84,9 @@ a:focus {
 
 .page_links > a {
   color: $ap_dark_blue;
+    &:hover {
+      color: $ap_light_blue !important;
+  }
 }
 
 .nav-pills > li > a {
@@ -89,6 +95,19 @@ a:focus {
   }
   &:focus {
       color: $dri_white;
+  }
+}
+
+.catalog_startOverLink  {
+  &:hover {
+      color: $ap_light_blue !important;
+  }
+}
+
+#citationLink {
+   &:hover,&:focus {
+    text-decoration: none;
+    background-color: $dri_white;
   }
 }
 
