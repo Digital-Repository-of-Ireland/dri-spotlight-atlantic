@@ -77,6 +77,40 @@ a:hover {
             }
 }
 
+#sidebar {
+  ol.sidenav {
+    li {
+      color: $ap_dark_blue;
+      .active {
+        color: $ap_light_blue;
+      }
+      a {
+        &:hover, &:focus {
+          color: $ap_light_blue;
+          background-color: transparent;
+        }
+        &:active {
+          color: $ap_light_blue;
+        }
+      }
+      > h4 {
+        font-size: ceil(($font-size-base * 1.05));
+        margin-top: 3 * $padding-large-vertical;
+        > a {
+          color: $ap_dark_blue;
+          display: block;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+
+.sidenav .active a {
+  color: $ap_light_blue;
+}
+
+
 .pagination > .active > a {
   color: #777777 !important;
   border-color: #ddd !important;
@@ -92,9 +126,11 @@ a:hover {
 .nav-pills > li > a {
   &:hover {
       color: $dri_white;
+      background-color: $ap_light_blue
   }
   &:focus {
       color: $dri_white;
+      background-color: $ap_light_blue;
   }
 }
 
@@ -107,7 +143,7 @@ a:hover {
 #citationLink {
    &:hover,&:focus {
     text-decoration: none;
-    background-color: $dri_white;
+    background-color: transparent;
   }
 }
 

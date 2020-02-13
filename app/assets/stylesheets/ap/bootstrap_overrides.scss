@@ -51,3 +51,30 @@
   color: $dri_white;
 }
 
+.btn-nav {
+  background-color: $ap_light_blue;
+  &:hover {
+    background-color: $ap_dark_blue !important;
+  }
+}
+
+.exhibit-navbar {
+// The dropdown menu (ul)
+.dropdown-menu {
+
+  // Links within the dropdown menu
+  > li > a {
+    color: $ap_dark_blue;
+    white-space: nowrap; // prevent links from randomly breaking onto new lines
+
+    &:hover,
+    &:focus {
+      color: $dri_white;
+      text-decoration: none;
+      background-color: $ap_light_blue;
+    }
+  }
+}
+}
+
+
