@@ -3,6 +3,14 @@ module Spotlight
     ##
     # A PORO to construct a solr hash for a given Dri Object json
     class DriObject
+
+      THEMES = ["human rights", "education", "communities"].freeze
+      SUB_THEMES = [
+        "lgbtq people", "disability", "migrants", "reconciliation",
+        "infrastructure", "knowledge and learning", "knowledge application",
+        "senior citizens", "children and youth", "citizen participation"
+      ].freeze
+
       attr_reader :collection
       def initialize(attrs = {})
         @id = attrs[:id]
@@ -81,12 +89,14 @@ module Spotlight
 
       def add_theme
         return unless metadata.key?('subject') && metadata['subject'].present?
-        solr_hash['readonly_theme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[0]
+
+        solr_hash['readonly_theme_ssim'] =  curated_collections.select { |c| THEMES.include?(c.downcase) }
       end
 
       def add_subtheme
         return unless metadata.key?('subject') && metadata['subject'].present?
-        solr_hash['readonly_subtheme_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[1]
+
+        solr_hash['readonly_subtheme_ssim'] = curated_collections.select { |c| SUB_THEMES.include?(c.downcase) }
       end
 
       def add_geographical_coverage
@@ -199,6 +209,10 @@ module Spotlight
 
           "#{iiif_manifest_base}/#{id}:#{file_id}/info.json"
         end.compact
+      end
+
+      def curated_collections
+        @curated_collections ||= metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
       end
 
       def thumbnail_field
