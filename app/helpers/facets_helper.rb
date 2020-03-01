@@ -15,7 +15,7 @@ module FacetsHelper
     path = path_for_facet(facet_field, item)
     content_tag(:span, class: "facet-label") do
 
-      if %w(readonly_grantee_ssim readonly_grant_ssim).include?(facet_field)
+      if %w(readonly_grantee_ssim readonly_grant_ssim readonly_oral_history_ssim).include?(facet_field)
         link_to_unless(options[:suppress_link],
                        facet_display_value(facet_field, item),
                        path,
@@ -35,5 +35,6 @@ module FacetsHelper
   def facet_info(value)
     return @grantees[value] if @grantees && @grantees.key?(value)
     return @grants[value] if @grants && @grants.key?(value)
+    return @oral[value] if @oral && @oral.key?(value)
   end
 end

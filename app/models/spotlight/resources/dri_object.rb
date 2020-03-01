@@ -3,14 +3,6 @@ module Spotlight
     ##
     # A PORO to construct a solr hash for a given Dri Object json
     class DriObject
-
-      THEMES = ["human rights", "education", "communities"].freeze
-      SUB_THEMES = [
-        "lgbtq people", "disability", "migrants", "reconciliation",
-        "infrastructure", "knowledge and learning", "knowledge application",
-        "senior citizens", "children and youth", "citizen participation"
-      ].freeze
-
       attr_reader :collection
       def initialize(attrs = {})
         @id = attrs[:id]
@@ -25,21 +17,29 @@ module Spotlight
         add_depositing_institute
         add_label
         add_creator
-        add_subject
-        add_theme
-        add_subtheme
-        add_type
+
+        if metadata.key?('subject') && metadata['subject'].present?
+          add_subject_facet
+          add_theme_facet
+          add_subtheme_facet
+          add_type_facet
+          add_oral_history_facet
+          add_collection_facet
+
+          if metadata['type'] != ['Collection']
+            add_grantee_facet
+            add_grant_facet
+          end
+        end
+
         add_temporal_coverage
         add_geographical_coverage
         add_metadata
         add_collection_id
-        add_collection
 
         if metadata['type'] == ['Collection']
           add_subcollection_type
         else
-          add_grantee
-          add_grant
           add_image_urls
         end
 
@@ -79,7 +79,11 @@ module Spotlight
         end
       end
 
-      def add_subject
+      def add_oral_history_facet
+        solr_hash['readonly_oral_history_ssim'] = dri_object.oral_history
+      end
+
+      def add_subject_facet
         solr_hash['readonly_subject_ssim'] = metadata['subject']
       end
 
@@ -87,32 +91,31 @@ module Spotlight
         solr_hash['readonly_temporal_coverage_ssim'] = metadata_class.dcmi_name(metadata['temporal_coverage']) if metadata.key?('temporal_coverage') && metadata['temporal_coverage'].present?
       end
 
-      def add_theme
-        return unless metadata.key?('subject') && metadata['subject'].present?
-
-        solr_hash['readonly_theme_ssim'] =  curated_collections.select { |c| THEMES.include?(c.downcase) }
+      def add_theme_facet
+        themes = dri_object.themes
+        return if themes.blank?
+        solr_hash['readonly_theme_ssim'] = themes[0]
       end
 
-      def add_subtheme
-        return unless metadata.key?('subject') && metadata['subject'].present?
-
-        solr_hash['readonly_subtheme_ssim'] = curated_collections.select { |c| SUB_THEMES.include?(c.downcase) }
+      def add_subtheme_facet
+        subthemes = dri_object.subthemes
+        return if subthemes.blank?
+        solr_hash['readonly_subtheme_ssim'] = subthemes[0]
       end
 
       def add_geographical_coverage
         solr_hash['readonly_geographical_coverage_ssim'] = metadata_class.dcmi_name(metadata['geographical_coverage']) if metadata.key?('geographical_coverage') && metadata['geographical_coverage'].present?
       end
 
-      def add_grantee
-        solr_hash['readonly_grantee_ssim'] = metadata['subject'][0] if metadata.key?('subject') && metadata['subject'].present?
+      def add_grantee_facet
+        solr_hash['readonly_grantee_ssim'] = dri_object.grantee
       end
 
-      def add_grant
-        return unless metadata.key?('subject') && metadata['subject'].present?
-        solr_hash['readonly_grant_ssim'] = metadata['subject'].select { |s| s.start_with?('Grant') }
+      def add_grant_facet
+        solr_hash['readonly_grant_ssim'] = dri_object.grant
       end
 
-      def add_type
+      def add_type_facet
         solr_hash['readonly_type_ssim'] = metadata['type']
       end
 
@@ -127,9 +130,9 @@ module Spotlight
         end
       end
 
-      def add_collection
+      def add_collection_facet
         return unless metadata.key?('subject') && metadata['subject'].present?
-        solr_hash['readonly_collection_ssim'] = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }[2]
+        solr_hash['readonly_collection_ssim'] = dri_object.collection
       end
 
       def add_subcollection_type
@@ -138,11 +141,21 @@ module Spotlight
           return
         end
 
-        solr_hash['readonly_subcollection_type_ssim'] = if metadata['title'].first.start_with?("Grant")
-                                                          'grant'
-                                                        else
-                                                          'grantee'
-                                                        end
+        return unless metadata['ancestor_title'].present?
+
+        root_title = metadata['ancestor_title'].last.downcase
+
+        if root_title.include?("grant documentation")
+          solr_hash['readonly_subcollection_type_ssim'] = if metadata['title'].first.start_with?("Grant")
+                                                            'grant'
+                                                          else
+                                                            'grantee'
+                                                          end
+        elsif root_title.include?("oral histories")
+          solr_hash['readonly_subcollection_type_ssim'] = 'oral'
+        elsif root_title.include?("publications")
+          solr_hash['readonly_subcollection_type_ssim'] = 'publications'
+        end
       end
 
       def collection_id_field
@@ -164,14 +177,18 @@ module Spotlight
       end
 
       def object_metadata
-        item_metadata = metadata_class.new(metadata).to_solr
         return {} unless metadata.present?
+        item_metadata = dri_object.to_solr
         create_sidecars_for(*item_metadata.keys)
 
         item_metadata.each_with_object({}) do |(key, value), hash|
           next unless (field = exhibit_custom_fields[key])
           hash[field.field] = value
         end
+      end
+
+      def dri_object
+        @dri_object ||= metadata_class.new(metadata)
       end
 
       def create_sidecars_for(*keys)
@@ -211,10 +228,6 @@ module Spotlight
         end.compact
       end
 
-      def curated_collections
-        @curated_collections ||= metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
-      end
-
       def thumbnail_field
         blacklight_config.index.try(:thumbnail_field)
       end
@@ -250,12 +263,71 @@ module Spotlight
       #  application if a different metadata
       #  strucure is used by the consumer
       class Metadata
+        THEMES = ["human rights", "education", "communities"].freeze
+        SUB_THEMES = [
+          "lgbtq people", "disability", "migrants", "reconciliation",
+          "infrastructure", "knowledge and learning", "knowledge application",
+          "senior citizens", "children and youth", "citizen participation"
+        ].freeze
+        GRANTEES = ["glen (organisation)", "national lgbt federation (ireland)",
+                    "transgender equality network ireland",
+                    "national university of ireland, galway. centre for disability law and policy",
+                    "irish penal reform trust", "akidwa", "irish refugee council",
+                    "south tyrone empowerment programme", "genio (organization)",
+                    "glencree centre for reconciliation", "disability action northern ireland",
+                    "community foundation for northern ireland", "immigrant council of ireland"]
+        COLLECTIONS = ["grant documentation", "oral histories"].freeze
+
         def initialize(metadata)
           @metadata = metadata
         end
 
         def to_solr
           metadata_hash.merge(descriptive_metadata)
+        end
+
+        def curated_collections
+          @curated_collections ||= metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
+        end
+
+        def collection
+          return if curated_collections.blank?
+
+          curated_collections.select { |c| COLLECTIONS.include?(c.downcase) }[0]
+        end
+
+        def grantee
+          return unless metadata.key?('subject') && metadata['subject'].present?
+
+          metadata['subject'].select { |s| GRANTEES.include?(s.downcase) }[0]
+        end
+
+        def grant
+          return unless metadata.key?('subject') && metadata['subject'].present?
+          grant = metadata['subject'].select { |s| s.start_with?('Grant') }
+          return if grant.empty?
+
+          grant
+        end
+
+        def oral_history
+          return if curated_collections.blank?
+
+          curated_collections.reject do |c|
+            COLLECTIONS.include?(c.downcase) || THEMES.include?(c.downcase) || SUB_THEMES.include?(c.downcase)
+          end
+        end
+
+        def themes
+          return [] if curated_collections.blank?
+
+          curated_collections.select { |c| THEMES.include?(c.downcase) }
+        end
+
+        def subthemes
+          return [] if curated_collections.blank?
+
+          curated_collections.select { |c| SUB_THEMES.include?(c.downcase) }
         end
 
         private
@@ -291,6 +363,9 @@ module Spotlight
             when 'grant'
               add_grant(field, hash)
               next
+            when 'oral_history'
+              add_oral_history(field, hash)
+              next
             when 'theme'
               add_theme(field, hash)
               next
@@ -309,7 +384,7 @@ module Spotlight
         end
 
         def desc_metadata_fields
-          %w(description doi creator subject grantee grant theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
+          %w(description doi creator subject grantee grant oral_history theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
         end
 
         def add_attribution(field, hash)
@@ -322,54 +397,37 @@ module Spotlight
         end
 
         def add_grantee(field, hash)
-          return unless metadata.key?('subject') && metadata['subject'].present?
-
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = metadata['subject'][0]
+          hash[field.capitalize] = grantee
         end
 
         def add_grant(field, hash)
-          return unless metadata.key?('subject') && metadata['subject'].present?
-          grant = metadata['subject'].select { |s| s.start_with?('Grant') }
-          return if grant.empty?
-
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = grant[0]
+          hash[field.capitalize] = grant
         end
 
-        def add_theme(field, hash)
-          return unless metadata.key?('subject') && metadata['subject'].present?
-          themes = metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
-          return if themes.empty?
-
+        def add_oral_history(field, hash)
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = themes[0]
+          hash[field.capitalize] = oral_history
         end
 
         def add_theme(field, hash)
           return if themes.empty?
 
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = themes[0]
+          hash[field.capitalize] = themes
         end
 
         def add_subtheme(field, hash)
-          return if themes.empty? || themes.length < 2
+          return if subthemes.empty?
 
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = themes[1]
+          hash[field.capitalize] = subthemes
         end
 
         def add_collection(field, hash)
-          return if themes.empty? || themes.length < 3
-
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = themes[2]
-        end
-
-        def themes
-          return [] unless metadata.key?('subject') && metadata['subject'].present?
-          metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1] }
+          hash[field.capitalize] = collection
         end
 
         def add_dcmi_field(field, hash)

@@ -39,6 +39,7 @@ class CatalogController < ApplicationController
     config.add_facet_field  'readonly_grant_ssim', label: 'Grant'
     config.add_facet_field  'readonly_temporal_coverage_ssim', label: 'Year of Grant'
     config.add_facet_field  'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
+    config.add_facet_field  'readonly_oral_history_ssim', label: 'Oral History'
     config.add_facet_field  'readonly_type_ssim', label: 'Type'
     config.add_facet_field  'readonly_subtheme_ssim', label: 'Sub-theme'
     config.add_facet_field  'readonly_theme_ssim', label: 'Theme'
@@ -58,7 +59,7 @@ class CatalogController < ApplicationController
   def index
     (@response, @document_list) = search_results(params)
 
-    grants_and_grantees
+    facet_mouseover_info
 
     respond_to do |format|
       format.html { store_preferred_view }
@@ -80,10 +81,13 @@ class CatalogController < ApplicationController
   def show
     @response, @document = fetch params[:id]
 
-    @grant = { 'grantee' => {}, 'grant' => {} }
-
-    grantee_info(@document['readonly_grantee_tesim'])
-    grant_info(@document['readonly_grant_tesim'])
+    if @document['readonly_collection_tesim'].first == 'Grant documentation'
+      @grant = { 'grantee' => {}, 'grant' => {} }
+      grantee_info(@document['readonly_grantee_tesim'])
+      grant_info(@document['readonly_grant_tesim'])
+    elsif @document['readonly_collection_tesim'].first == 'Oral histories'
+      @oral = oral_history_info(@document['readonly_oral_history_tesim'])
+    end
 
     respond_to do |format|
       format.html { setup_next_and_previous_documents }
@@ -94,17 +98,19 @@ class CatalogController < ApplicationController
 
   private
 
-  def grants_and_grantees
+  def facet_mouseover_info
     results = repository.search(
-      fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant"
+      fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral"
     )
 
     docs = results['response']['docs']
     grantees = facet_by_field_name('readonly_grantee_ssim').items.map(&:value)
     grants = facet_by_field_name('readonly_grant_ssim').items.map(&:value)
+    oral = facet_by_field_name('readonly_oral_history_ssim').items.map(&:value)
 
     @grantees = {}
     @grants = {}
+    @oral = {}
 
     docs.each do |doc|
       if doc['readonly_subcollection_type_ssim'] == ['grantee']
@@ -119,6 +125,14 @@ class CatalogController < ApplicationController
         grants.each do |grant|
           if doc['full_title_tesim'].include?(grant)
             @grants[grant] = doc['readonly_description_tesim'][0]
+          end
+        end
+      end
+
+      if doc['readonly_subcollection_type_ssim'] == ['oral']
+        oral.each do |oral|
+          if doc['full_title_tesim'].include?(oral)
+            @oral[oral] = doc['readonly_description_tesim'][0]
           end
         end
       end
@@ -150,6 +164,19 @@ class CatalogController < ApplicationController
 
       @grant['grant']['number'] = grant.first
       @grant['grant']['description'] = grant_description
+    end
+  end
+
+  def oral_history_info(interviewee)
+    result = repository.search(
+      q: "readonly_title_tesim:\"#{interviewee}\"",
+      fq: "readonly_subcollection_type_ssim:oral"
+    )
+    if result['response']['docs'].present?
+      oral_history_collection = result['response']['docs'][0]
+      oral_history_description = oral_history_collection['readonly_description_tesim'][0]
+
+      oral_history_description
     end
   end
 end
