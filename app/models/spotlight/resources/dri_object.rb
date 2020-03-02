@@ -174,6 +174,8 @@ module Spotlight
       def add_metadata
         solr_hash.merge!(object_metadata)
         sidecar.update(data: sidecar.data.merge(object_metadata))
+
+        sidecar.private! if metadata['type'] == ['Collection']
       end
 
       def object_metadata
