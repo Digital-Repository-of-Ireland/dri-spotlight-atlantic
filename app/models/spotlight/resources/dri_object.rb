@@ -13,7 +13,6 @@ module Spotlight
 
       def to_solr
         add_document_id
-        add_doi
         add_depositing_institute
         add_label
         add_creator
@@ -63,12 +62,6 @@ module Spotlight
         solr_hash['readonly_creator_ssim'] = metadata['creator']
       end
 
-      def add_doi
-        if !metadata['doi'].nil? && metadata['doi'].key?('url')
-          solr_hash['readonly_doi_tesim'] = metadata['doi']['url']
-        end
-      end
-
       def add_depositing_institute
         if metadata.key?('institute')
           metadata['institute'].each do |institute|
@@ -88,7 +81,8 @@ module Spotlight
       end
 
       def add_temporal_coverage
-        solr_hash['readonly_temporal_coverage_ssim'] = metadata_class.dcmi_name(metadata['temporal_coverage']) if metadata.key?('temporal_coverage') && metadata['temporal_coverage'].present?
+        return unless metadata.key?('temporal_coverage') && metadata['temporal_coverage'].present?
+        solr_hash['readonly_temporal_coverage_ssim'] = dri_object.dcmi_name(metadata['temporal_coverage'])
       end
 
       def add_theme_facet
@@ -104,7 +98,8 @@ module Spotlight
       end
 
       def add_geographical_coverage
-        solr_hash['readonly_geographical_coverage_ssim'] = metadata_class.dcmi_name(metadata['geographical_coverage']) if metadata.key?('geographical_coverage') && metadata['geographical_coverage'].present?
+        return unless metadata.key?('geographical_coverage') && metadata['geographical_coverage'].present?
+        solr_hash['readonly_geographical_coverage_ssim'] = dri_object.dcmi_name(metadata['geographical_coverage'])
       end
 
       def add_grantee_facet
@@ -181,6 +176,7 @@ module Spotlight
       def object_metadata
         return {} unless metadata.present?
         item_metadata = dri_object.to_solr
+
         create_sidecars_for(*item_metadata.keys)
 
         item_metadata.each_with_object({}) do |(key, value), hash|
@@ -209,7 +205,7 @@ module Spotlight
 
       def exhibit_custom_fields
         @exhibit_custom_fields ||= exhibit.custom_fields.each_with_object({}) do |value, hash|
-          hash[value.label] = value
+          hash[value.configuration['label']] = value
         end
       end
 
@@ -298,6 +294,13 @@ module Spotlight
           curated_collections.select { |c| COLLECTIONS.include?(c.downcase) }[0]
         end
 
+        def dcmi_name(value)
+          value.map do |v|
+            name = v[/\Aname=(?<name>.+?);/i, 'name']
+            name.try(:strip) || v
+          end
+        end
+
         def grantee
           return unless metadata.key?('subject') && metadata['subject'].present?
 
@@ -377,6 +380,9 @@ module Spotlight
             when 'collection'
               add_collection(field, hash)
               next
+            when 'doi'
+              add_doi(field, hash)
+              next
             end
 
             next unless metadata[field].present?
@@ -386,7 +392,7 @@ module Spotlight
         end
 
         def desc_metadata_fields
-          %w(description doi creator subject grantee grant oral_history theme subtheme collection temporal_coverage geographical_coverage type attribution rights license)
+          %w(description doi creator subject grantee grant oral_history theme subtheme collection geographical_coverage temporal_coverage type attribution rights license)
         end
 
         def add_attribution(field, hash)
@@ -395,6 +401,12 @@ module Spotlight
           hash[field.capitalize] ||= []
           metadata['institute'].each do |institute|
             hash[field.capitalize] += Array(institute['name'])
+          end
+        end
+
+        def add_doi(field, hash)
+          if metadata['doi'].present? && metadata['doi'].first.key?('url')
+            hash[field.capitalize] = metadata['doi'].first['url']
           end
         end
 
@@ -434,14 +446,8 @@ module Spotlight
 
         def add_dcmi_field(field, hash)
           return unless metadata.key?(field)
-
           hash[field.capitalize] ||= []
-          hash[field.capitalize] = self.class.dcmi_name(metadata[field])
-        end
-
-        def self.dcmi_name(value)
-          name = value.first[/\Aname=(?<name>.+?);/i, 'name']
-          name || value
+          hash[field.capitalize] = dcmi_name(metadata[field])
         end
       end
     end
