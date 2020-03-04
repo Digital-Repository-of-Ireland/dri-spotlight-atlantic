@@ -81,12 +81,14 @@ class CatalogController < ApplicationController
   def show
     @response, @document = fetch params[:id]
 
-    if @document['readonly_collection_tesim'].first == 'Grant documentation'
-      @grant = { 'grantee' => {}, 'grant' => {} }
-      grantee_info(@document['readonly_grantee_tesim'])
-      grant_info(@document['readonly_grant_tesim'])
-    elsif @document['readonly_collection_tesim'].first == 'Oral histories'
-      @oral = oral_history_info(@document['readonly_oral_history_tesim'])
+    if @document['readonly_collection_tesim'].present?
+      if @document['readonly_collection_tesim'].first == 'Grant documentation'
+        @grant = { 'grantee' => {}, 'grant' => {} }
+        grantee_info(@document['readonly_grantee_tesim'])
+        grant_info(@document['readonly_grant_tesim'])
+      elsif @document['readonly_collection_tesim'].first == 'Oral histories'
+        @oral = oral_history_info(@document['readonly_oral_history_tesim'])
+      end
     end
 
     respond_to do |format|
