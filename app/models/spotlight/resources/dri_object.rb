@@ -41,6 +41,7 @@ module Spotlight
         else
           add_image_urls
         end
+        add_thumbnail
 
         solr_hash
       end
@@ -89,6 +90,19 @@ module Spotlight
         themes = dri_object.themes
         return if themes.blank?
         solr_hash['readonly_theme_ssim'] = themes[0]
+      end
+
+      def add_thumbnail
+        files.each do |file|
+          # skip unless it is an image
+          next unless file && file.key?(surrogate_postfix)
+
+          file_id = file_id_from_uri(file[surrogate_postfix])
+
+          solr_hash[thumbnail_field] = "#{iiif_manifest_base}/#{id}:#{file_id}/full/!400,400/0/default.jpg"
+          solr_hash[thumbnail_list_field] = "#{iiif_manifest_base}/#{id}:#{file_id}/square/100,100/0/default.jpg"
+          break
+        end
       end
 
       def add_subtheme_facet
@@ -218,16 +232,22 @@ module Spotlight
           # skip unless it is an image
           next unless file && file.key?(surrogate_postfix)
 
-          file_id = File.basename(
-                      URI.parse(file[surrogate_postfix]).path
-                    ).split("_#{surrogate_postfix}")[0]
+          file_id = file_id_from_uri(file[surrogate_postfix])
 
           "#{iiif_manifest_base}/#{id}:#{file_id}/info.json"
         end.compact
       end
 
+      def file_id_from_uri(uri)
+        File.basename(URI.parse(uri).path).split("_")[0]
+      end
+
       def thumbnail_field
         blacklight_config.index.try(:thumbnail_field)
+      end
+
+      def thumbnail_list_field
+        blacklight_config.view.list.try(:thumbnail_field)
       end
 
       def tile_source_field

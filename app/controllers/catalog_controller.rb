@@ -9,12 +9,13 @@ class CatalogController < ApplicationController
 
     config.show.document_actions.delete(:email)
     config.show.document_actions.delete(:sms)
+    config.index.document_actions.delete(:bookmark)
 
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
 
-    config.index.thumbnail_method = :render_thumbnail
+    #config.index.thumbnail_method = :render_thumbnail
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
@@ -30,6 +31,8 @@ class CatalogController < ApplicationController
 
     # solr field configuration for search results/index views
     config.index.title_field = 'full_title_tesim'
+    config.view.index.thumbnail_field = 'thumbnail_url_ssm'
+    config.view.list.thumbnail_field = 'thumbnail_square_url_ssm'
 
     config.add_search_field 'all_fields', label: 'Everything'
 
