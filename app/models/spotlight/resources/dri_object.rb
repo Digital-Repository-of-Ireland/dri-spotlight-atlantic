@@ -103,6 +103,12 @@ module Spotlight
           solr_hash[thumbnail_list_field] = "#{iiif_manifest_base}/#{id}:#{file_id}/square/100,100/0/default.jpg"
           break
         end
+
+        if solr_hash['readonly_collection_ssim'] == 'Oral histories' && !solr_hash.key?(thumbnail_list_field)
+          thumbnail_url = "#{repository_base}/collections/#{metadata['isGovernedBy'].first}/cover"
+          solr_hash[thumbnail_field] = thumbnail_url
+          solr_hash[thumbnail_list_field] = thumbnail_url
+        end
       end
 
       def add_subtheme_facet
@@ -125,7 +131,7 @@ module Spotlight
       end
 
       def add_type_facet
-        solr_hash['readonly_type_ssim'] = metadata['type']
+        solr_hash['readonly_type_ssim'] = metadata['type'].map(&:strip)
       end
 
       def add_document_id
@@ -172,7 +178,11 @@ module Spotlight
       end
 
       def add_image_urls
-        solr_hash[tile_source_field] = image_urls
+        if solr_hash['readonly_collection_ssim'] == 'Oral histories' && !metadata['type'].map(&:strip).include?('image')
+          solr_hash[tile_source_field] = related_image_url
+        else
+          solr_hash[tile_source_field] = image_urls
+        end
       end
 
       def add_label
@@ -227,6 +237,10 @@ module Spotlight
         Spotlight::Resources::Dri::Engine.config.iiif_manifest_base
       end
 
+      def repository_base
+        DriSpotlight::Application.config.repository_base
+      end
+
       def image_urls
         @image_urls ||= files.map do |file|
           # skip unless it is an image
@@ -236,6 +250,18 @@ module Spotlight
 
           "#{iiif_manifest_base}/#{id}:#{file_id}/info.json"
         end.compact
+      end
+
+      def related_image_url
+        results = Blacklight::Solr::Repository.new(blacklight_config).search(
+          fq: "collection_id_ssim:#{solr_hash[collection_id_field].first} AND readonly_type_ssim:image"
+        )
+        docs = results['response']['docs']
+        return if docs.empty?
+
+        related_id = docs[0]['id']
+        r_doc = ::SolrDocument.find(related_id)
+        r_doc['content_metadata_image_iiif_info_ssm'] unless r_doc.blank?
       end
 
       def file_id_from_uri(uri)
