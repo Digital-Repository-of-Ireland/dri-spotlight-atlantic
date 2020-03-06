@@ -3,6 +3,29 @@
 class CatalogController < ApplicationController
   include Blacklight::Catalog
 
+  COLLECTION_MOUSEOVER = {
+    "Grant documentation" => "To document Atlantic’s work on the island of Ireland this " +
+                              "collection draws materials from grant making records of " +
+                              "The Atlantic Philanthropies entire archive housed at " +
+                              "Cornell University Library’s Division of Rare and " +
+                              "Manuscript Collections in Ithaca, New York. " +
+                              "This collection extends to 60 grant files, " +
+                              "containing records that document the entire life cycle " +
+                              "of grants-from proposals to final reports and printed ephemera, " +
+                              "such as brochures.",
+    "Oral histories" => "To document Atlantic’s work on the island of Ireland oral histories " +
+                        "were captured by Digital Repository of Ireland as part of the " +
+                        "Atlantic Philanthropies Archive Project (2017-2020) titled Amplifying " +
+                        "change: A history of the Atlantic Philanthropies on island of Ireland. " +
+                        "This collection extends to forty oral histories. " +
+                        "Each oral history recording is accompanied by a transcript and a " +
+                        "Polaroid photograph of the interviewee.",
+    "Publications" => "The collection The Atlantic Philanthropies-Island of Ireland-Publications " +
+                      "includes reports commissioned by The Atlantic Philanthropies on the topic of " +
+                      "particular issues or countries that have benefited from the organisation’s " +
+                      "grant making."
+  }.freeze
+
   configure_blacklight do |config|
     config.show.oembed_field = :oembed_url_ssm
     config.show.partials.insert(1, :oembed)
@@ -116,6 +139,7 @@ class CatalogController < ApplicationController
     @grantees = {}
     @grants = {}
     @oral = {}
+    @collections = COLLECTION_MOUSEOVER
 
     docs.each do |doc|
       if doc['readonly_subcollection_type_ssim'] == ['grantee']

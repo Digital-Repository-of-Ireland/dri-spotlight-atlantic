@@ -320,7 +320,7 @@ module Spotlight
                     "south tyrone empowerment programme", "genio (organization)",
                     "glencree centre for reconciliation", "disability action northern ireland",
                     "community foundation for northern ireland", "immigrant council of ireland"]
-        COLLECTIONS = ["grant documentation", "oral histories"].freeze
+        COLLECTIONS = ["grant documentation", "oral histories", "publications"].freeze
 
         def initialize(metadata)
           @metadata = metadata
