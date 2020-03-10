@@ -128,7 +128,8 @@ class CatalogController < ApplicationController
 
   def facet_mouseover_info
     results = repository.search(
-      fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral"
+      fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral",
+      rows: @response['response']['numFound']
     )
 
     docs = results['response']['docs']
