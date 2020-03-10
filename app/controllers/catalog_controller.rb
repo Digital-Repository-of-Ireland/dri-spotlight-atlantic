@@ -61,14 +61,14 @@ class CatalogController < ApplicationController
 
     config.add_sort_field 'relevance', sort: 'score desc', label: 'Relevance'
 
-    config.add_facet_field  'readonly_grantee_ssim', label: 'Grantee'
-    config.add_facet_field  'readonly_grant_ssim', label: 'Grant'
-    config.add_facet_field  'readonly_temporal_coverage_ssim', label: 'Year of Grant'
-    config.add_facet_field  'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
-    config.add_facet_field  'readonly_oral_history_ssim', label: 'Oral History'
-    config.add_facet_field  'readonly_type_ssim', label: 'Type'
-    config.add_facet_field  'readonly_subtheme_ssim', label: 'Sub-theme'
-    config.add_facet_field  'readonly_theme_ssim', label: 'Theme'
+    config.add_facet_field  'readonly_grantee_ssim', label: 'Grantee', limit: 20
+    config.add_facet_field  'readonly_grant_ssim', label: 'Grant', limit: 20
+    config.add_facet_field  'readonly_temporal_coverage_ssim', label: 'Year of Grant', limit: 20
+    config.add_facet_field  'readonly_geographical_coverage_ssim', label: 'Location of Grantee', limit: 20
+    config.add_facet_field  'readonly_oral_history_ssim', label: 'Oral History', limit: 20
+    config.add_facet_field  'readonly_type_ssim', label: 'Type', limit: 20
+    config.add_facet_field  'readonly_subtheme_ssim', label: 'Sub-theme', limit: 20
+    config.add_facet_field  'readonly_theme_ssim', label: 'Theme', limit: 20
     config.add_facet_field  'readonly_collection_ssim', label: 'Collection'
 
     config.add_facet_fields_to_solr_request!
