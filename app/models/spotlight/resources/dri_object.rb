@@ -89,7 +89,7 @@ module Spotlight
       def add_theme_facet
         themes = dri_object.themes
         return if themes.blank?
-        solr_hash['readonly_theme_ssim'] = themes[0]
+        solr_hash['readonly_theme_ssim'] = themes
       end
 
       def add_thumbnail
@@ -114,7 +114,7 @@ module Spotlight
       def add_subtheme_facet
         subthemes = dri_object.subthemes
         return if subthemes.blank?
-        solr_hash['readonly_subtheme_ssim'] = subthemes[0]
+        solr_hash['readonly_subtheme_ssim'] = subthemes
       end
 
       def add_geographical_coverage
@@ -178,7 +178,7 @@ module Spotlight
       end
 
       def add_image_urls
-        if solr_hash['readonly_collection_ssim'] == 'Oral histories' && !metadata['type'].map(&:strip).include?('image')
+        if solr_hash['readonly_collection_ssim'] == 'Oral histories' && metadata['type'].map(&:strip).include?('audio')
           solr_hash[tile_source_field] = related_image_url
         else
           solr_hash[tile_source_field] = image_urls
