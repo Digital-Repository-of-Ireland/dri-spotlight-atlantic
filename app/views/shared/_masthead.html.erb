@@ -21,7 +21,7 @@
         <% if current_exhibit.subtitle.present? %>
         </div>
         <div class="site-subtitle h2">
-            <small><%= current_exhibit.subtitle %></small>
+            <small><%= current_exhibit.subtitle.html_safe %></small>
           </div>
         <% end %>
       <% else %>
