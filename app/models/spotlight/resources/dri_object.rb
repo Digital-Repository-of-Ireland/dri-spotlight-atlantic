@@ -323,7 +323,7 @@ module Spotlight
                     "northside partnership (dublin, ireland)", "ireland's age friendly cities and counties programme",
                     "third age foundation", "the alzheimer society of ireland", "barnardos (Ireland)",
                     "we the citizens-university college dublin foundation", "derry theatre trust",
-                    "marriage equality (organisation)"]
+                    "marriage equality (organisation)", "greater shankill partnership"]
         COLLECTIONS = ["grant documentation", "oral histories", "publications"].freeze
 
         def initialize(metadata)
