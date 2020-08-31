@@ -324,7 +324,7 @@ module Spotlight
                     "third age foundation", "the alzheimer society of ireland", "barnardos (Ireland)",
                     "we the citizens-university college dublin foundation", "derry theatre trust",
                     "marriage equality (organisation)", "greater shankill partnership"]
-        COLLECTIONS = ["grant documentation", "oral histories", "publications"].freeze
+        COLLECTIONS = ["grant documentation", "oral histories", "publications", "essays"].freeze
 
         def initialize(metadata)
           @metadata = metadata
