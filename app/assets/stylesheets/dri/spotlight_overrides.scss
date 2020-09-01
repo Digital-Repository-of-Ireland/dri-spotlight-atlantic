@@ -33,10 +33,22 @@ a:hover {
 
 .btn-link {
   @extend .dri-button;
+  color: $ap_dark_blue;
+  background-color: none;
+  &:hover {
+    background-color: $ap_light_blue !important;
+    color: $dri_white;
+    text-decoration: none;
+  }
+}
+
+.btn-disabled {
+  @extend .dri-button;
   color: $dri_white;
   background-color: $dri_lightgrey;
   &:hover {
-    background-color: darken($dri_lightgrey, 3%) !important;
+    background-color: $dri_lightgrey !important;
+    color: $dri_white;
   }
 }
 
