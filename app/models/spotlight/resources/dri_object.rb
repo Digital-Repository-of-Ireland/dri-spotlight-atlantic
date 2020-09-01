@@ -321,7 +321,7 @@ module Spotlight
                     "glencree centre for reconciliation", "disability action northern ireland",
                     "community foundation for northern ireland", "immigrant council of ireland",
                     "northside partnership (dublin, ireland)", "ireland's age friendly cities and counties programme",
-                    "third age foundation", "the alzheimer society of ireland", "barnardos (Ireland)",
+                    "third age foundation", "the alzheimer society of ireland", "barnardos (ireland)",
                     "we the citizens-university college dublin foundation", "derry theatre trust",
                     "marriage equality (organisation)", "greater shankill partnership"]
         COLLECTIONS = ["grant documentation", "oral histories", "publications", "essays"].freeze
@@ -335,7 +335,7 @@ module Spotlight
         end
 
         def curated_collections
-          @curated_collections ||= metadata['subject'].select { |s| s.start_with?('Curated collection')}.map { |t| t.split('--')[1..-1].join(' and ') }
+          @curated_collections ||= metadata['subject'].select { |s| s.downcase.start_with?('curated collection')}.map { |t| t.split('--')[1..-1].join(' and ') }
         end
 
         def collection
