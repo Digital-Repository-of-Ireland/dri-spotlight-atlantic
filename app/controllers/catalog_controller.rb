@@ -69,7 +69,7 @@ class CatalogController < ApplicationController
     config.add_facet_field  'readonly_type_ssim', label: 'Type', limit: 20
     config.add_facet_field  'readonly_subtheme_ssim', label: 'Sub-theme', limit: 20
     config.add_facet_field  'readonly_theme_ssim', label: 'Theme', limit: 20
-    config.add_facet_field  'readonly_collection_ssim', label: 'Collection'
+    config.add_facet_field  'readonly_collection_ssim', label: 'Collection', collapse: false
 
     config.add_facet_fields_to_solr_request!
 
@@ -131,7 +131,7 @@ class CatalogController < ApplicationController
       fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral",
       rows: 0
     )
-      
+
     results = repository.search(
       fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral",
       rows: count_result['response']['numFound']
