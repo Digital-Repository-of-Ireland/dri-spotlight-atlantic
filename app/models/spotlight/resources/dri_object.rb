@@ -104,7 +104,7 @@ module Spotlight
           break
         end
 
-        if solr_hash['readonly_collection_ssim'] == 'Oral histories' && !solr_hash.key?(thumbnail_list_field)
+        if ['Oral histories','Grant documentation'].include?(solr_hash['readonly_collection_ssim']) && !solr_hash.key?(thumbnail_list_field)
           thumbnail_url = "#{repository_base}/collections/#{metadata['isGovernedBy'].first}/cover"
           solr_hash[thumbnail_field] = thumbnail_url
           solr_hash[thumbnail_list_field] = thumbnail_url
