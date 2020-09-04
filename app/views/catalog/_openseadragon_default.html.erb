@@ -20,10 +20,10 @@
   }
 %>
 
-<% unless image.nil? %>
-  <% count = Array(image).length %>
-  <div class="openseadragon-container <%= osd_container_class %>">
+<div class="openseadragon-container <%= osd_container_class %>">
+  <% unless image.nil? %>	
     <div class="osd-toolbar row">
+      <% count = Array(image).length %> 
       <% if count > 1 %>
         <% osd_config = osd_config_referencestrip.merge(osd_config) %>
 
@@ -32,17 +32,19 @@
           <a id="osd-next"><span class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
       <% end %>
-        <div class="col-md-6 controls">
-          <a id="osd-zoom-in"><span class="glyphicon glyphicon-plus-sign"></span></a>
-          <a id="osd-zoom-out"><span class="glyphicon glyphicon-minus-sign"></span></a>
-          <a id="osd-home"><span class="glyphicon glyphicon-resize-small"></span></a>
-          <a id="osd-full-page"><span class="glyphicon glyphicon-fullscreen"></span></a>
-        </div>
+      <div class="col-md-6 controls">
+        <a id="osd-zoom-in"><span class="glyphicon glyphicon-plus-sign"></span></a>
+        <a id="osd-zoom-out"><span class="glyphicon glyphicon-minus-sign"></span></a>
+        <a id="osd-home"><span class="glyphicon glyphicon-resize-small"></span></a>
+        <a id="osd-full-page"><span class="glyphicon glyphicon-fullscreen"></span></a>
+      </div>
     </div>
     <%= openseadragon_picture_tag image, class: 'osd-image row', data: { openseadragon: osd_config } %>
-
-    <%= link_to("https://repository.dri.ie/catalog/#{document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
-      <%= button_tag('View on DRI', {class: 'dri_open_button'}) %>
-    <% end %>
-  </div>
-<% end %>
+  <% end %>
+  <% if document.key?('thumbnail_url_ssm') %>
+    <%= image_tag document['thumbnail_url_ssm'].first %>
+  <% end %>
+  <%= link_to("https://repository.dri.ie/catalog/#{document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
+    <%= button_tag('View on DRI', {class: 'dri_open_button'}) %>
+  <% end %>
+</div>
