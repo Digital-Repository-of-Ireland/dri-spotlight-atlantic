@@ -23,7 +23,13 @@ class CatalogController < ApplicationController
     "Publications" => "The collection The Atlantic Philanthropies-Island of Ireland-Publications " +
                       "includes reports commissioned by The Atlantic Philanthropies on the topic of " +
                       "particular issues or countries that have benefited from the organisation’s " +
-                      "grant making."
+                      "grant making.",
+    "Essays" => "To contextualise The Atlantic Philanthropies’ work on the island of Ireland, " +
+                "essays were commissioned by the Digital Repository of Ireland as part the Atlantic " +
+                " Philanthropies Archive Project (2017-2020) titled Amplifying change: A history of " +
+                "the Atlantic Philanthropes on island of Ireland. This collection extends to six essays " +
+                "that offer a wide range of perspectives to the organisation from authors that were " +
+                "beneficiaries and bibliographers."
   }.freeze
 
   configure_blacklight do |config|
