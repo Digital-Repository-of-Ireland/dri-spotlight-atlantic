@@ -40,9 +40,10 @@
       </div>
     </div>
     <%= openseadragon_picture_tag image, class: 'osd-image row', data: { openseadragon: osd_config } %>
-  <% end %>
-  <% if document.key?('thumbnail_url_ssm') %>
-    <%= image_tag document['thumbnail_url_ssm'].first %>
+  <% else %>
+    <% if document.key?('thumbnail_url_ssm') %>
+      <%= image_tag document['thumbnail_url_ssm'].first %>
+    <% end %>
   <% end %>
   <%= link_to("https://repository.dri.ie/catalog/#{document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
     <%= button_tag('View on DRI', {class: 'dri_open_button'}) %>
