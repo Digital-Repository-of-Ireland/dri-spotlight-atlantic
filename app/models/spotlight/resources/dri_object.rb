@@ -313,17 +313,38 @@ module Spotlight
           "infrastructure", "knowledge and learning", "knowledge application",
           "senior citizens", "children and youth", "citizen participation"
         ].freeze
-        GRANTEES = ["glen (organisation)", "national lgbt federation (ireland)",
+        GRANTEES = [
+                    "glen (organisation)",
+                    "national lgbt federation (ireland)",
                     "transgender equality network ireland",
                     "national university of ireland, galway. centre for disability law and policy",
-                    "irish penal reform trust", "akidwa", "irish refugee council",
-                    "south tyrone empowerment programme", "genio (organization)",
-                    "glencree centre for reconciliation", "disability action northern ireland",
-                    "community foundation for northern ireland", "immigrant council of ireland",
-                    "northside partnership (dublin, ireland)", "ireland's age friendly cities and counties programme",
-                    "third age foundation", "the alzheimer society of ireland", "barnardos (ireland)",
-                    "we the citizens-university college dublin foundation", "derry theatre trust",
-                    "marriage equality (organisation)", "greater shankill partnership"]
+                    "irish penal reform trust",
+                    "akidwa",
+                    "irish refugee council",
+                    "south tyrone empowerment programme",
+                    "genio (organization)",
+                    "glencree centre for reconciliation",
+                    "disability action northern ireland",
+                    "community foundation for northern ireland",
+                    "immigrant council of ireland",
+                    "northside partnership (dublin, ireland)",
+                    "ireland's age friendly cities and counties programme",
+                    "third age foundation",
+                    "the alzheimer society of ireland",
+                    "barnardos (ireland)",
+                    "we the citizens-university college dublin foundation",
+                    "university college dublin foundation",
+                    "derry theatre trust",
+                    "marriage equality (organisation)",
+                    "greater shankill partnership",
+                    "dublin university educational",
+                    "cork university foundation",
+                    "university of limerick foundation",
+                    "integrated education fund",
+                    "trinity foundation",
+                    "queen's university of belfast foundation",
+                    "galway university foundation"
+                   ]
         COLLECTIONS = ["grant documentation", "oral histories", "publications", "essays"].freeze
 
         def initialize(metadata)
