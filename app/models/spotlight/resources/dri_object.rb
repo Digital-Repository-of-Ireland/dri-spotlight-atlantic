@@ -356,6 +356,8 @@ module Spotlight
         end
 
         def curated_collections
+          return unless metadata.key?('subject') && metadata['subject'].present?
+
           @curated_collections ||= metadata['subject'].select { |s| s.downcase.start_with?('curated collection')}.map { |t| t.split('--')[1..-1].join(' and ') }
         end
 
