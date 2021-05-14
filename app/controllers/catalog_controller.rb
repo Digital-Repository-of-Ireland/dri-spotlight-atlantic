@@ -40,6 +40,9 @@ class CatalogController < ApplicationController
     config.show.document_actions.delete(:sms)
     config.index.document_actions.delete(:bookmark)
 
+    config.navbar.partials.delete(:bookmark)
+    config.navbar.partials.delete(:search_history)
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
