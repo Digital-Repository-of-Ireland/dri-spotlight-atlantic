@@ -189,7 +189,7 @@ GEM
     faraday-net_http_persistent (1.1.0)
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
-    ffi (1.15.0)
+    ffi (1.15.5)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -220,7 +220,7 @@ GEM
       json
     iiif_manifest (1.0.1)
       activesupport (>= 4)
-    image_processing (1.12.1)
+    image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
     jbuilder (2.10.0)
@@ -355,7 +355,7 @@ GEM
       faraday (>= 0.9.0)
     ruby-oembed (0.13.1)
     ruby-progressbar (1.11.0)
-    ruby-vips (2.1.2)
+    ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.4)
     ruby_dep (1.5.0)
