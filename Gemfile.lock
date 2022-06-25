@@ -173,7 +173,7 @@ GEM
     devise_invitable (1.7.5)
       actionmailer (>= 4.1.0)
       devise (>= 4.0.0)
-    diffy (3.4.0)
+    diffy (3.4.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.10.0)
