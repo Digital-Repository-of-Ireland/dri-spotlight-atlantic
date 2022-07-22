@@ -76,12 +76,22 @@ $navbar-default-link-active-bg:        $ap_dark_blue;
 $navbar-default-link-disabled-color:   #ccc !default;
 $navbar-default-link-disabled-bg:      transparent !default;
 
+$navbar-light-hover-color:             $ap_light_blue;
+$navbar-light-color:                   $ap_dark_blue;
+$navbar-light-active-color:            $ap_light_blue;
+
+$nav-pills-link-active-bg:             $ap_dark_blue;
+
 $nav-link-hover-bg:                    transparent;
 
 $breadcrumb-active-color:              $ap_light_blue;
 
 $headings-small-color:                 $dri_darkgrey;
 
+$exhibit-card-bg:                      #f5f5f5;
+$exhibit-card-gutter:                  10px;
+
+@import "bootstrap/functions";
 @import "bootstrap/variables";
 @import "spotlight/variables";
 @import "spotlight/variables_bootstrap";
@@ -90,13 +100,13 @@ $navbar-inverse-toggle-hover-bg:       $dri_lightgrey;
 $navbar-inverse-toggle-icon-bar-bg:       $dri_darkgrey;
 
 $brandbar-height: 35px;
-$brandbar-padding-vertical: (($brandbar-height - $line-height-computed) / 2);
+$brandbar-padding-vertical: 15px;
 
 $home-masthead-height: 119px;
 
 $breadcrumb-bg: transparent;
-$breadcrumb-padding-vertical: $padding-base-vertical;
+$breadcrumb-padding-vertical: $spacer;
 
-$nav-link-padding: $padding-base-vertical $padding-base-horizontal;
+$nav-link-padding: $spacer $spacer;
 
 $modal-header-footer-height-guess: 212px;

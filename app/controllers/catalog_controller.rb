@@ -94,8 +94,8 @@ class CatalogController < ApplicationController
   def index
     (@response, @document_list) = search_results(params)
 
-    facet_mouseover_info
-
+    #facet_mouseover_info
+    puts "Here"
     respond_to do |format|
       format.html { store_preferred_view }
       format.rss  { render layout: false }

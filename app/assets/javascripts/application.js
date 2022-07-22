@@ -13,10 +13,10 @@
 //= require rails-ujs
 //
 // Required by Blacklight
-//= require jquery
+//= require jquery3
 //= require jquery_ujs
-//= require bootstrap/tooltip
-//= require bootstrap/popover
+//= require popper
+//= require bootstrap-sprockets
 //= require blacklight/blacklight
 //
 //= require_tree .

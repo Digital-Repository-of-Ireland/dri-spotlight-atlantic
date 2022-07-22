@@ -1,0 +1,143 @@
+$padding-small-horizontal: 10px;
+$padding-small-vertical:   5px;
+$padding-large-vertical:    10px !default;
+$padding-base-vertical:     6px !default;
+
+.exhibit-card {
+  box-sizing: border-box;
+  float: left;
+  height: $exhibit-card-height;
+  margin: 0 -1 * $exhibit-card-gutter $exhibit-card-gutter $exhibit-card-gutter;
+  //               image width        +       gutter         + border (x2)
+  max-width: $exhibit-card-image-size + $exhibit-card-gutter + 2px;
+  padding: 0 $exhibit-card-gutter 0 0;
+  perspective: 1000; // for flip animation
+  position: relative;
+
+  .flipper {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: 0.6s;
+  }
+
+  &.hover .flipper,
+  &:hover .flipper {
+    -ms-filter: "FlipH"; // autoprefixer doesn't handle this case.
+    filter: FlipH;
+    transform: rotateY(180deg);
+  }
+}
+
+.card-face {
+  backface-visibility: hidden;
+  background-color: $exhibit-card-bg;
+  border: 1px solid $exhibit-card-border;
+  height: $exhibit-card-height;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform-style: preserve-3d;
+  transition: 0.6s;
+  width: 100%;
+}
+
+.card-title {
+  @extend .h5;
+  @extend .text-center;
+
+  font-size: $h5-font-size;
+  line-height: 1.2;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+
+  img {
+    height: $exhibit-card-image-size;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .card-title {
+    padding-left: $padding-small-horizontal;
+    padding-right: $padding-small-horizontal;
+    padding-top: $padding-large-vertical;
+  }
+
+  .unpublished {
+    @extend .mx-auto;
+    display: block;
+    font-size: $font-size-base;
+    margin-top: -1em;
+    position: relative;
+    width: 15ch;  
+  }
+}
+
+.card-back {
+  box-shadow: $exhibit-card-shadow;
+  padding: 0 $exhibit-card-gutter;
+  transform: rotateY(-180deg);
+
+  .card-title {
+    border-bottom: 1px dotted $exhibit-card-border;
+    line-height: $headings-line-height;
+    margin-bottom: $padding-base-vertical;
+    padding-bottom: $padding-base-vertical;
+  }
+
+  .subtitle {
+    @extend .h5;
+    @extend .text-center;
+    font-size: $h6-font-size;
+    line-height: $headings-line-height;
+  }
+
+  .description {
+    font-size: 0.8rem;
+  }
+
+  .visit-exhibit {
+    bottom: $exhibit-card-gutter;
+    position: absolute;
+  }
+}
+
+.nav.tags {
+  display: flex;
+}
+
+// between the small and medium breakpoints, reduce the size of the image by a little bit
+@media (min-width: breakpoint-min("sm")) and (max-width: breakpoint-max("lg")) {
+
+  // calculate the size of one full grid column
+  $reduce-exhibit-card-image-size: (((map-get($container-max-widths, "md") - $grid-gutter-width) / $grid-columns) - ($grid-gutter-width / 2));
+
+  .exhibit-card,
+  .card-face {
+    height: $exhibit-card-height - $reduce-exhibit-card-image-size;
+  }
+
+  .card-front,
+  .card-back {
+    img {
+      height: $exhibit-card-image-size - $reduce-exhibit-card-image-size;
+    }
+  }
+
+  // Cannot extend .btn-sm within a @media query
+  .center-btn .btn {
+    @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-line-height-sm, $btn-border-radius-sm);
+  }
+}
+
+.center-btn {
+  left: 50%;
+  position: absolute;
+
+  .btn {
+    left: -50%;
+    position: relative;
+  }
+}

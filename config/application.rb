@@ -10,8 +10,9 @@ module DriSpotlight
   class Application < Rails::Application
     config.action_mailer.default_url_options = { host: "localhost:3000", from: "noreply@example.com" }
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
-
+    config.load_defaults 6.1
+    config.autoloader = :classic
+    #config.active_record.verbose_query_logs = true
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

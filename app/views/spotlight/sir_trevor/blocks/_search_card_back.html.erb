@@ -10,8 +10,8 @@
   <p class="description">
     <%= truncated_description = search.long_description.truncate(168, omission: '', separator: ' ') %>
   <% if search.long_description.length > 168 %>
-    <%= content_tag(:span,"&hellip;".html_safe, class: "visible-sm visible-md") %>
-    <span class="hidden-sm hidden-md">
+    <%= content_tag(:span,"&hellip;".html_safe, class: "d-lg-none") %>
+    <span class="d-none d-lg-block">
       <%= search.long_description.slice(truncated_description.length, search.long_description.length) %>
     </span>
   <% end %>
