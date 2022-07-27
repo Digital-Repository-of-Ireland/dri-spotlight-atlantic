@@ -90,20 +90,18 @@ class CatalogController < ApplicationController
     config.add_show_field 'readonly_geographical_coverage_ssim', label: 'Location of Grantee'
   end
 
-  # get search results from the solr index
   def index
-    (@response, @document_list) = search_results(params)
+    (@response, deprecated_document_list) = search_service.search_results
 
-    #facet_mouseover_info
-    puts "Here"
+    @document_list = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_document_list, 'The @document_list instance variable is deprecated; use @response.documents instead.')
+    facet_mouseover_info
+
     respond_to do |format|
       format.html { store_preferred_view }
       format.rss  { render layout: false }
       format.atom { render layout: false }
       format.json do
         @presenter = Blacklight::JsonPresenter.new(@response,
-                                                   @document_list,
-                                                   facets_from_request,
                                                    blacklight_config)
       end
       additional_response_formats(format)
@@ -114,7 +112,8 @@ class CatalogController < ApplicationController
   # get a single document from the index
   # to add responses for formats other than html or json see _Blacklight::Document::Export_
   def show
-    @response, @document = fetch params[:id]
+    deprecated_response, @document = search_service.fetch(params[:id])
+    @response = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_response, 'The @response instance variable is deprecated; use @document.response instead.')
 
     if @document['readonly_collection_tesim'].present?
       if @document['readonly_collection_tesim'].first == 'Grant documentation'
@@ -127,29 +126,69 @@ class CatalogController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { setup_next_and_previous_documents }
-      format.json { render json: { response: { document: @document } } }
+      format.html { @search_context = setup_next_and_previous_documents }
+      format.json
       additional_export_formats(@document, format)
     end
   end
 
+  # get search results from the solr index
+  # def index
+  #   @response = search_service.search_results.first
+
+  #   facet_mouseover_info
+  #   respond_to do |format|
+  #     format.html { store_preferred_view }
+  #     format.rss  { render layout: false }
+  #     format.atom { render layout: false }
+  #     format.json do
+  #       @presenter = Blacklight::JsonPresenter.new(@response,
+  #                                                  blacklight_config)
+  #     end
+  #     additional_response_formats(format)
+  #     document_export_formats(format)
+  #   end
+  # end
+
+  # # get a single document from the index
+  # # to add responses for formats other than html or json see _Blacklight::Document::Export_
+  # def show
+  #   @document = search_service.fetch(params[:id]).first
+
+  #   if @document['readonly_collection_tesim'].present?
+  #     if @document['readonly_collection_tesim'].first == 'Grant documentation'
+  #       @grant = { 'grantee' => {}, 'grant' => {} }
+  #       grantee_info(@document['readonly_grantee_tesim'])
+  #       grant_info(@document['readonly_grant_tesim'])
+  #     elsif @document['readonly_collection_tesim'].first == 'Oral histories'
+  #       @oral = oral_history_info(@document['readonly_oral_history_tesim'])
+  #     end
+  #   end
+
+  #   respond_to do |format|
+  #     format.html { setup_next_and_previous_documents }
+  #     format.json { render json: { response: { document: @document } } }
+  #     #additional_export_formats(@document, format)
+  #   end
+  # end
+
   private
 
   def facet_mouseover_info
-    count_result = repository.search(
+    count_result = search_service.repository.search(
       fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral",
       rows: 0
     )
 
-    results = repository.search(
+    results = search_service.repository.search(
       fq: "readonly_subcollection_type_ssim:grantee OR readonly_subcollection_type_ssim:grant OR readonly_subcollection_type_ssim:oral",
       rows: count_result['response']['numFound']
     )
 
     docs = results['response']['docs']
-    grantees = facet_by_field_name('readonly_grantee_ssim').items.map(&:value)
-    grants = facet_by_field_name('readonly_grant_ssim').items.map(&:value)
-    oral = facet_by_field_name('readonly_oral_history_ssim').items.map(&:value)
+    grantees = facet_by_field_name('readonly_grantee_ssim', @response).items.map(&:value)
+    grants = facet_by_field_name('readonly_grant_ssim', @response).items.map(&:value)
+    oral = facet_by_field_name('readonly_oral_history_ssim', @response).items.map(&:value)
 
     @grantees = {}
     @grants = {}
@@ -184,7 +223,7 @@ class CatalogController < ApplicationController
   end
 
   def grantee_info(grantee)
-    result = repository.search(
+    result = search_service.repository.search(
       q: "readonly_subject_tesim:\"#{grantee}\"",
       fq: "readonly_subcollection_type_ssim:grantee"
     )
@@ -198,7 +237,7 @@ class CatalogController < ApplicationController
   end
 
   def grant_info(grant)
-    result = repository.search(
+    result = search_service.repository.search(
       q: "readonly_title_tesim:\"#{grant}\"",
       fq: "readonly_subcollection_type_ssim:grant"
     )
@@ -212,7 +251,7 @@ class CatalogController < ApplicationController
   end
 
   def oral_history_info(interviewee)
-    result = repository.search(
+    result = search_service.repository.search(
       q: "readonly_title_tesim:\"#{interviewee}\"",
       fq: "readonly_subcollection_type_ssim:oral"
     )
