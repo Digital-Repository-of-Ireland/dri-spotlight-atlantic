@@ -43,6 +43,10 @@ class CatalogController < ApplicationController
     config.navbar.partials.delete(:bookmark)
     config.navbar.partials.delete(:search_history)
 
+    config.view.gallery(document_component: Blacklight::Gallery::DocumentComponent)
+    config.view.masonry(document_component: Blacklight::Gallery::DocumentComponent)
+    config.view.slideshow(document_component: Blacklight::Gallery::SlideshowComponent)
+
     config.view.gallery.partials = [:index_header, :index]
     config.view.masonry.partials = [:index]
     config.view.slideshow.partials = [:index]
@@ -131,46 +135,6 @@ class CatalogController < ApplicationController
       additional_export_formats(@document, format)
     end
   end
-
-  # get search results from the solr index
-  # def index
-  #   @response = search_service.search_results.first
-
-  #   facet_mouseover_info
-  #   respond_to do |format|
-  #     format.html { store_preferred_view }
-  #     format.rss  { render layout: false }
-  #     format.atom { render layout: false }
-  #     format.json do
-  #       @presenter = Blacklight::JsonPresenter.new(@response,
-  #                                                  blacklight_config)
-  #     end
-  #     additional_response_formats(format)
-  #     document_export_formats(format)
-  #   end
-  # end
-
-  # # get a single document from the index
-  # # to add responses for formats other than html or json see _Blacklight::Document::Export_
-  # def show
-  #   @document = search_service.fetch(params[:id]).first
-
-  #   if @document['readonly_collection_tesim'].present?
-  #     if @document['readonly_collection_tesim'].first == 'Grant documentation'
-  #       @grant = { 'grantee' => {}, 'grant' => {} }
-  #       grantee_info(@document['readonly_grantee_tesim'])
-  #       grant_info(@document['readonly_grant_tesim'])
-  #     elsif @document['readonly_collection_tesim'].first == 'Oral histories'
-  #       @oral = oral_history_info(@document['readonly_oral_history_tesim'])
-  #     end
-  #   end
-
-  #   respond_to do |format|
-  #     format.html { setup_next_and_previous_documents }
-  #     format.json { render json: { response: { document: @document } } }
-  #     #additional_export_formats(@document, format)
-  #   end
-  # end
 
   private
 
