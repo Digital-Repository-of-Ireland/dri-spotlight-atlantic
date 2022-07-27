@@ -5,8 +5,8 @@ html {
     height: 100%;
     body {
         font: 120% Arial, Helvetica, clean, sans-serif;
-        *font-size: small;
-        *font: x-small;
+        font-size: small;
+        font: x-small;
         margin: 0;
     }
 }
@@ -148,7 +148,7 @@ a:hover {
 
 .catalog_startOverLink  {
   &:hover {
-      color: $ap_light_blue !important;
+      color: $dri_white !important;
   }
 }
 

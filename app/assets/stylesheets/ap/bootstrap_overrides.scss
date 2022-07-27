@@ -12,10 +12,10 @@
   border-top-color: $ap_light_blue;
 }
 
-.facet_limit-active > .panel-heading {
-  color: $dri_white;
-  background-color: $ap_dark_blue;
-  border-color: $ap_light_blue;
+.facet-limit-active > .facet-field-heading {
+  color: $dri_white !important;
+  background-color: $ap_dark_blue !important;
+  border-color: $ap_light_blue !important;
 
   a:focus {
     text-decoration: none;
@@ -28,25 +28,23 @@
   }
 }
 
+.facet-limit-active {
+  border-color: $ap_light_blue !important;
+}
+
 .facet-values li .selected {
-  color: $ap_light_blue;
+  color: $ap_light_blue !important;
 }
 
-.panel-heading.collapse-toggle .panel-title:after {
-    /* symbol for "opening" panels */
-    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
-    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
-    float: right;        /* adjust as needed */
-    color: $ap_dark_blue;         /* adjust as needed */
-    font-size: 0.8em;
-    line-height: normal;
+.facet-field-heading .btn.collapse-toggle {
+    color: $ap_dark_blue !important;         /* adjust as needed */
 }
 
-.facet_limit-active .panel-heading.collapse-toggle .panel-title:after {
-    color: $dri_white;
+.facet-limit-active .btn.collapse-toggle {
+    color: $dri_white !important;
 }
 
-.facet_limit-active > .panel-heading a:hover {
+.facet-limit-active > .facet-field-heading a:hover {
   text-decoration: none;
   color: $dri_white;
 }
@@ -61,6 +59,7 @@
 .exhibit-navbar {
 // The dropdown menu (ul)
 .dropdown-menu {
+  font-size: small;
 
   // Links within the dropdown menu
   > li > a {
@@ -77,4 +76,33 @@
 }
 }
 
+.btn-primary {
+    @include button-variant($ap_dark_blue, darken($ap_dark_blue, 7.5%), darken($ap_dark_blue, 10%), lighten($ap_dark_blue,5%), lighten($ap_dark_blue, 10%), darken($ap_dark_blue,30%));
+}
 
+.document-title-heading {
+      font-size: 1rem !important;
+}
+
+.facets-heading {
+	font-size: 1rem !important;
+}
+
+.btn {
+	font-size: 0.9rem !important;
+}
+
+.dl-invert dt {
+  float: left;
+  clear: left;
+  width: 160px;
+  text-align: right;
+}
+
+.dl-invert dd {
+  margin-left: 180px !important;
+}
+
+.document h1 {
+	font-size: 2.1rem !important;
+}
