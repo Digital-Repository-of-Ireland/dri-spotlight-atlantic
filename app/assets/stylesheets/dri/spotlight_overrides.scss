@@ -128,11 +128,15 @@ a:hover {
   border-color: #ddd !important;
 }
 
-.page_links > a {
+.page-links > a {
   color: $ap_dark_blue;
     &:hover {
       color: $ap_light_blue !important;
   }
+}
+
+.page-links a {
+	font-size: small !important;
 }
 
 .nav-pills > li > a {
