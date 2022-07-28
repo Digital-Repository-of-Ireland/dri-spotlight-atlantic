@@ -180,11 +180,6 @@ a:hover {
   }
 }
 
-.openseadragon-container {
-  display: block;
-  min-height: 300px;
-}
-
 .popover {
     color: $dri_grey;
     max-width: 60%;
@@ -192,4 +187,11 @@ a:hover {
 
 .facet-popover {
     padding-left: 5px;
+}
+
+.openseadragon-container {
+  .osd-image {
+    border: 1px solid #ccc;
+    height: 400px;
+  }
 }
