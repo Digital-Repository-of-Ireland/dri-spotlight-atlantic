@@ -11,6 +11,14 @@
   margin-bottom: 0;
 }
 
+.navbar {
+  background-color: $dri_white !important;
+}
+
+#user-util-collapse .nav-link {
+    color: $dri_grey !important;
+  }
+
 .masthead {
   background-color: $masthead-bg;
   border-bottom: 1px solid $border-color;
