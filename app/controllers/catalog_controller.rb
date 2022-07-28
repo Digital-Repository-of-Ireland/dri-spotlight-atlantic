@@ -45,13 +45,11 @@ class CatalogController < ApplicationController
 
     config.view.gallery(document_component: Blacklight::Gallery::DocumentComponent)
     config.view.masonry(document_component: Blacklight::Gallery::DocumentComponent)
-    config.view.slideshow(document_component: Blacklight::Gallery::SlideshowComponent)
-
-    config.view.gallery.partials = [:index_header, :index]
-    config.view.masonry.partials = [:index]
-    config.view.slideshow.partials = [:index]
 
     #config.index.thumbnail_method = :render_thumbnail
+    config.add_results_collection_tool(:sort_widget)
+    config.add_results_collection_tool(:per_page_widget)
+    config.add_results_collection_tool(:view_type_group)
 
     config.show.tile_source_field = :content_metadata_image_iiif_info_ssm
     config.show.partials.insert(1, :openseadragon)
@@ -96,7 +94,6 @@ class CatalogController < ApplicationController
 
   def index
     (@response, deprecated_document_list) = search_service.search_results
-
     @document_list = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_document_list, 'The @document_list instance variable is deprecated; use @response.documents instead.')
     facet_mouseover_info
 

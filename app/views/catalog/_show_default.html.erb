@@ -1,6 +1,11 @@
 <% doc_presenter = show_presenter(document) %>
 <%# default partial to display solr document fields in catalog show view -%>
 <dl class="dl-horizontal  dl-invert">
+  <dt></dt><dd>
+  <%= link_to("https://repository.dri.ie/catalog/#{document['readonly_dri_id_ssim'].first}", target: "_blank")  do %>
+    <%= button_tag('View on DRI', {class: 'dri_open_button'}) %>
+  <% end %>
+</dd>
   <% if @grant.present? || @oral.present? %>
   <dt>Context</dt>
     <dd>

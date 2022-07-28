@@ -60,7 +60,6 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-gem 'mysql2'
 
 group :production do
   gem 'mysql2'
@@ -70,7 +69,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'blacklight', '~> 7.0'
-gem 'blacklight-spotlight', github: 'projectblacklight/spotlight'
+gem 'blacklight-spotlight', '3.5.0.1'
 group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
 end
@@ -91,19 +90,3 @@ gem 'blacklight-gallery', '~> 4.0'
 gem 'openseadragon', '>= 0.2.0'
 gem 'blacklight-oembed', '~> 1.0'
 gem 'devise_invitable'
-
-#gem 'bootswatch-rails'
-
-#gem 'rsolr', '>= 1.0'
-#gem 'jquery-rails'
-#gem 'jquery-ui-sass-rails'
-#gem "devise", ">= 4.7.1"
-#gem 'devise-guests', '~> 0.6'
-#gem 'friendly_id'
-#gem 'riiif'
-#gem 'sitemap_generator'
-#gem 'blacklight-gallery', '>= 0.3.0'
-#gem 'blacklight-oembed', '>= 0.1.0'
-#gem 'devise_invitable'
-#gem 'bootstrap', '~> 4.0.0'
-#gem 'boostrap-sass'
