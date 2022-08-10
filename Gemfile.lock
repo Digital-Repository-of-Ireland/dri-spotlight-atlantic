@@ -1,9 +1,10 @@
 GIT
   remote: https://github.com/Digital-Repository-of-Ireland/spotlight-resources-dri.git
-  revision: e62316cb5aca99a51a2fa69af2d18935cbb51406
+  revision: b05c927d4d8aa6162eaf628bfd1f4e070f728460
+  branch: spotlight3
   specs:
     spotlight-resources-dri (0.1.0)
-      blacklight-spotlight
+      blacklight-spotlight (~> 3)
 
 GEM
   remote: https://rubygems.org/
@@ -198,9 +199,9 @@ GEM
     diffy (3.4.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    erubi (1.10.0)
+    erubi (1.11.0)
     execjs (2.8.1)
-    faraday (1.10.0)
+    faraday (1.10.1)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -443,7 +444,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.4)
-    ssrf_filter (1.0.7)
+    ssrf_filter (1.0.8)
     test_xml (0.1.8)
       diffy (~> 3.0)
       nokogiri (>= 1.3.2)
@@ -469,8 +470,9 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     version_gem (1.1.0)
-    view_component (2.62.0)
+    view_component (2.66.0)
       activesupport (>= 5.0.0, < 8.0)
+      concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
