@@ -74,7 +74,7 @@ group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
 end
 
-gem 'spotlight-resources-dri', github: 'Digital-Repository-of-Ireland/spotlight-resources-dri', branch: 'spotlight3'
+gem 'spotlight-resources-dri', github: 'Digital-Repository-of-Ireland/spotlight-resources-dri', branch: 'main'
 
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'bootstrap', '~> 4.0'

@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/Digital-Repository-of-Ireland/spotlight-resources-dri.git
-  revision: b05c927d4d8aa6162eaf628bfd1f4e070f728460
-  branch: spotlight3
+  revision: d5bd83c309d9c2f4acd619fba8a462c026846b63
+  branch: main
   specs:
-    spotlight-resources-dri (0.1.0)
+    spotlight-resources-dri (1.0.0)
       blacklight-spotlight (~> 3)
 
 GEM
