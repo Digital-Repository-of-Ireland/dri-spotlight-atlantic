@@ -25,7 +25,7 @@ $dri_logo_tiny_url: 'dri/dri_ident_tiny.png';
 $ap_dark_blue: #076A73;
 $ap_light_blue: #0793A8;
 
-$logo_image: $dri_logo_url;
+$logo_image: image-url($dri_logo_tiny_url);
 
 $brand-primary: $ap_dark_blue;
 
